@@ -15,7 +15,6 @@ def parse_args():
     parser.add_argument("--question", help="User instruction; read from stdin when omitted")
     parser.add_argument("--question-time", type=float, default=0.0, help="Absolute time when the instruction arrives")
     parser.add_argument("--fps", type=float, default=4.0)
-    parser.add_argument("--round-seconds", type=float, default=1.0)
     parser.add_argument("--start", type=float, default=0.0)
     parser.add_argument("--end", type=float)
     parser.add_argument("--window-rounds", type=int, default=64)
@@ -35,14 +34,14 @@ def parse_args():
     parser.add_argument("--realtime", action="store_true", help="Pace round arrival using the video clock")
     parser.add_argument("--output", type=Path, help="Create a new JSONL file; existing files are not overwritten")
     args = parser.parse_args()
-    if args.fps <= 0 or args.round_seconds <= 0 or args.start < 0 or args.question_time < 0:
-        parser.error("fps and round-seconds must be positive; start and question-time must be nonnegative")
+    if args.fps <= 0 or args.start < 0 or args.question_time < 0:
+        parser.error("fps must be positive; start and question-time must be nonnegative")
     if args.end is not None and args.end < args.start:
         parser.error("end must be greater than or equal to start")
     if args.window_rounds < 1 or args.max_new_tokens < 1 or args.max_context_tokens <= args.max_new_tokens + 1:
         parser.error("window-rounds and max-new-tokens must be positive, with enough max-context-tokens")
-    if args.video_max_frames < args.fps * args.round_seconds:
-        parser.error("video-max-frames must accommodate all frames in the current round")
+    if args.video_max_frames < 1:
+        parser.error("video-max-frames must be positive")
     if args.max_rounds is not None and args.max_rounds < 1:
         parser.error("max-rounds must be positive")
     if not 0 < args.frame_min_pixels <= args.frame_max_pixels:
@@ -74,8 +73,9 @@ def encode_context(processor, rounds, question, question_observed_at, system_pro
         images.extend(turn["images"])
         if turn["assistant"] is not None:
             messages.append({"role": "assistant", "content": turn["assistant"]})
-    text = processor.apply_chat_template(
-        messages, tokenize=False, add_generation_prompt=True, enable_thinking=False
+    text = processor.tokenizer.apply_chat_template(
+        messages, chat_template=processor.chat_template,
+        tokenize=False, add_generation_prompt=True, enable_thinking=False,
     )
     return processor(
         text=[text], images=images, return_tensors="pt", add_special_tokens=False, return_mm_token_type_ids=True
@@ -179,9 +179,7 @@ def main():
         if args.output is not None:
             args.output.parent.mkdir(parents=True, exist_ok=True)
             output = stack.enter_context(args.output.open("x", encoding="utf-8"))
-        video_rounds = iter_video_rounds(
-            args.video, fps=args.fps, start=args.start, end=args.end, round_seconds=args.round_seconds
-        )
+        video_rounds = iter_video_rounds(args.video, fps=args.fps, start=args.start, end=args.end)
         stack.callback(video_rounds.close)
         for turn, images in video_rounds:
             timestamp = turn["timestamp"]

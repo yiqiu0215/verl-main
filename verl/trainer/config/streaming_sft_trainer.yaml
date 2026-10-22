@@ -10,6 +10,9 @@ data:
   micro_batch_size_per_gpu: 1
   use_dynamic_bsz: true
   max_token_len_per_gpu: 32768
+  length_bucket_micro_batches: true
+  max_padded_token_len_per_gpu: ${data.max_token_len_per_gpu}
+  max_vision_patches_per_gpu: 131072
   max_length: 32768
   video_max_frames: 256
   frame_min_pixels: 784
@@ -23,9 +26,8 @@ data:
   streaming_video:
     annotations: /workspace/s/lzw/datasets/Stream-VideoLLM/TrainingData/annotations_curated
     fps: 4.0
-    round_seconds: 1.0
-    window_rounds: 64
-    video_max_frames: ${data.video_max_frames}
+    truncation: filter
+    max_refetch: 100
     video_root: /workspace/s/lzw/datasets/Stream-VideoLLM/TrainingData
     missing_video: skip
     path_map: null
@@ -93,6 +95,7 @@ optim:
   clip_grad: 1.0
 
 streaming_loss:
+  supervised_only: true
   gamma: 2.0
   auto_alpha: true
 

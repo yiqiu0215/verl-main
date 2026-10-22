@@ -20,7 +20,6 @@ def main():
     parser.add_argument("--path-map", help="JSON path map, keyed by source/video_source/video_name, path or video_name")
     parser.add_argument("--path-replacements", help="JSON object/file containing old-prefix to new-prefix replacements")
     parser.add_argument("--fps", type=float, default=4.0)
-    parser.add_argument("--round-seconds", type=float, default=1.0)
     parser.add_argument("--missing-video", choices=("skip", "error"), default="skip")
     parser.add_argument(
         "--inspect-only", action="store_true", help="Inspect annotation labels without requiring media files"
@@ -56,9 +55,10 @@ def main():
                     raise FileNotFoundError(f"Missing media at {reference[0]}:{line_number}: {path!r}")
                 counts["skipped"] += 1
             else:
-                turns = streaming.build_stream_turns(record, args.fps, args.round_seconds)
+                turns = streaming.build_stream_turns(record, args.fps)
                 counts["accepted"] += 1
-                counts["round_samples"] += len(turns)
+                counts["conversation_samples"] += 1
+                counts["frame_rounds"] += len(turns)
                 counts["sampled_frames"] += sum(len(turn["frame_timestamps"]) for turn in turns)
                 counts.update({f"state_{key}": value for key, value in Counter(t["state"] for t in turns).items()})
                 if output:

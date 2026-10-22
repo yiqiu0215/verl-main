@@ -1,6 +1,6 @@
 # Qwen3-VL 流式与离线多模态混合 SFT
 
-本实现直接使用当前 verl 的 `SFTTrainer → TrainingWorker → FSDP/FSDP2`，通过一份数据集清单混合训练项目现有 `stream-meta-v1` 流式数据和 VideoChat3 Stage3 的图片与离线视频数据。流式训练与推理默认 **4 FPS 采样、每秒一轮，每轮观察 4 帧后只决策一次 `</Silence>` / `</Response>`**，不创建 Standby 标签。VideoChat3 样本不增加交互状态，采用普通 NTP Cross Entropy；视频使用完整视频或标注明确指定片段的采样帧。
+本实现直接使用当前 verl 的 `SFTTrainer → TrainingWorker → FSDP/FSDP2`，通过一份数据集清单混合训练 `stream-meta-v1` 流式数据和 VideoChat3 Stage3 的图片与离线视频数据。流式默认 **4 FPS、每帧一个 user-assistant 轮次、完整会话单样本、所有 assistant 轮次监督**；状态为 `</Silence>` / `</Response>`，不创建 Standby 标签。超过 `MAX_LENGTH` 的完整流式会话默认过滤。VideoChat3 样本不增加交互状态，回答采用普通 NTP Cross Entropy。
 
 ## 文件结构
 
@@ -8,7 +8,7 @@
 | --- | --- |
 | `examples/streaming_video_sft/datasets.yaml` | 统一配置数据集类型、标注、视频根目录、重复次数及各数据集选项 |
 | `verl/utils/dataset/mixed_video_sft.py` | 读取清单，组合流式与离线 QA 数据，复用原生 sampler |
-| `verl/utils/dataset/streaming_video.py` | JSONL/JSON 解析、媒体路径解析、时间轴、按时间读帧、前缀窗口样本、当前轮 Label Mask 和 Qwen3-VL mRoPE |
+| `verl/utils/dataset/streaming_video.py` | JSONL/JSON 解析、媒体路径解析、逐帧完整会话、超长过滤、全轮 Label Mask 和 Qwen3-VL mRoPE |
 | `verl/utils/dataset/offline_video_qa.py` | 通用离线 QA 兼容及当前 assistant 目标编码 |
 | `verl/utils/dataset/videochat3.py` | VideoChat3 文本、多图、离线视频消息与 JSONL 偏移索引 |
 | `verl/utils/dataset/videochat3_media.py` | 根据 manifest 读取解压媒体或 tar 内的图像、GIF、MP4、帧目录 |
@@ -18,7 +18,7 @@
 | `verl/trainer/config/streaming_sft_trainer.yaml` | 模型、数据、FSDP2、优化器和 Checkpoint 配置 |
 | `examples/streaming_video_sft/prepare_data.py` | 只读检查标注，或新建包含已解析媒体路径的 JSONL |
 | `examples/streaming_video_sft/train.sh` | 单机/多机 torchrun 启动 |
-| `examples/streaming_video_sft/infer.py` | 本地视频按轮回放、多帧状态决策、Response 续写、JSONL 输出 |
+| `examples/streaming_video_sft/infer.py` | 本地视频逐帧回放、逐帧状态决策、Response 续写、JSONL 输出 |
 
 通用框架只增加了配置可选的特殊 Token 注册、FSDP 包装前的 Embedding 扩展、分 micro-batch 前的 loss 准备 hook，以及多模态张量进入模型前的设备对齐。普通 SFT 不启用新增 Token 配置时不扩展词表。
 
@@ -185,9 +185,8 @@ datasets:
     repeat: 1
     options:
       fps: ${data.streaming_video.fps}
-      round_seconds: ${data.streaming_video.round_seconds}
-      window_rounds: ${data.streaming_video.window_rounds}
-      video_max_frames: ${data.streaming_video.video_max_frames}
+      truncation: ${data.streaming_video.truncation}
+      max_refetch: ${data.streaming_video.max_refetch}
       missing_video: ${data.streaming_video.missing_video}
   - name: "videochat3_STEM_AI2D_GPT4V_train_0-0_merged_5507"
     type: videochat3
@@ -225,7 +224,7 @@ datasets:
 
 `annotations` 可填写文件、目录、glob 或路径列表；目录递归加载 JSON/JSONL。清单中的相对 `annotations`、`video_root`、`options.path_map`、`options.source_map`、`options.annotation_root` 文件/目录路径以该清单所在目录为基准。每项 `options` 覆盖该类适配器的数据选项，流式与通用 `offline_video_qa` 的 `path_map`、`path_replacements` 也可以放在这里；VideoChat3 使用官方来源映射与本地 manifest。`enabled: false` 完整跳过该项；只训练一种数据时保留对应项，或将其他项禁用。启用项的标注路径无匹配，或跳过缺失媒体后该来源没有任何可用样本，均明确报错。
 
-`repeat` 是正整数，用于重复该数据源的样本索引，增加其在拼接数据集中的相对数量；不复制视频或预处理图片。每个 epoch 由 verl 原生 sampler 在全体样本上 shuffle，**不保证每个 batch 中的两类数据占固定比例**。流式一轮是一个样本，离线每个 assistant 回答是一个样本，因此 `repeat: 1` 并不代表两类数据数量各占一半。可用每项的 `max_samples` 限制样本数量，再配合 `repeat` 调整训练占比。
+`repeat` 是正整数，用于重复该数据源的样本索引，增加其在拼接数据集中的相对数量；不复制视频或预处理图片。每个 epoch 由 verl 原生 sampler 在全体样本上 shuffle，**不保证每个 batch 中的两类数据占固定比例**。流式一条标注会话是一个候选样本，离线每个 assistant 回答是一个样本，因此 `repeat: 1` 并不代表两类数据数量各占一半。可用每项的 `max_samples` 限制样本数量，再配合 `repeat` 调整训练占比。
 
 每项 `max_samples` 在重复前生效，取 `-1` 表示不限，正整数表示上限。全局 `data.train_max_samples` 在重复后按各来源样本数的比例确定性限量，并均匀覆盖来源的索引；每个启用来源至少保留一个样本，所以上限小于启用来源数时会报错。`data.val_files` 可指定另一份清单用于验证，默认 `null`；训练清单和验证清单分别加载。 当前默认共 193 个来源（1 个流式加 192 个 VideoChat3），因此全局 `data.train_max_samples` 为正数时至少应为 193，短跑示例使用 256。
 
@@ -254,9 +253,9 @@ datasets:
 
 上例取自本地同类真实记录，问题作了缩写；空路径保持为空，需由使用者填写或显式映射。代码不会根据 `video_name` 猜测视频文件名。
 
-时间始终使用秒，支持数值、数值字符串和 `MM:SS` / `HH:MM:SS`。默认 `fps=4`、`round_seconds=1`；FPS 控制轮内图像采样频率，轮时长控制状态决策频率，两者乘积须为正整数。从 0 秒开始的第一轮观察 0.25、0.5、0.75、1.0 秒的 4 帧，在 1.0 秒作一次状态决策；不会额外生成 0 秒的单帧轮。后续按同样方式推进。
+时间始终使用秒，支持数值、数值字符串和 `MM:SS` / `HH:MM:SS`。默认 `fps=4`，每隔 0.25 秒采样一帧，每帧各自形成一个 user-assistant 轮次。从 0 秒开始的前四轮分别对应 0.25、0.5、0.75、1.0 秒；FPS 同时决定图像采样和状态决策频率，不再单独设置轮时长。
 
-`video_ranges` 中相接区间先合并后分轮，避免边界产生额外决策；有间隔的区间分别采样，保留原始绝对时间，不把间隔拼成连续视频。最后不足一秒的轮保留真实截止时间，可能少于 4 帧，不用未来帧补齐。问题和 Response 只在第一个轮末时间不早于其 `at` 的轮出现；同一轮中的多个回答按顺序合并。Response 覆盖该轮 Silence，未标注轮保持 Silence。不进行语义补标。
+`video_ranges` 中相接区间先合并再采样，避免边界产生额外决策；有间隔的区间分别采样，保留原始绝对时间。最后不足一个采样周期时保留真实截止时间的一帧，不用未来帧补齐。问题和 Response 只在第一个采样时间不早于其 `at` 的轮出现；同一轮中的多个回答按顺序合并。Response 覆盖该轮 Silence，未标注轮保持 Silence。不进行语义补标。
 
 `media_type=sequence` 时，`video_path` 必须指向真实帧目录，`sequence.fps` 必须存在。默认按自然文件名顺序读取帧，支持 jpg/jpeg/png/webp。若需明确文件名，可在标注的 `sequence.filename_pattern` 或 `data.streaming_video.sequence_filename_pattern` 中指定，例如 `{seconds:05d}_{centiseconds:02d}.jpg`；也支持 `{index:06d}` / `{frame_idx:06d}`，编号偏移由 `sequence.start_index` 指定。非均匀、缺帧或带其他图片的目录应先整理或提供明确 pattern。
 
@@ -303,7 +302,7 @@ datasets:
 
 超长时只对视频帧均匀减帧，保留多图问答中的全部图片与完整答案；文本、多图或视频减到一帧后仍超长则报错，需要提高 Token 预算或降低每图像素。`missing_media: skip` 默认跳过缺少实际媒体的记录并统计数量，`error` 则停止；来源映射配置错误与训练时的媒体解码错误仍会报错。
 
-三类数据适配器在建立索引时均自动跳过无效标注，包括空 assistant 回答、缺少必需字段、不支持的角色或内容类型，以及流式时间线格式错误。跳过的是整条会话，不保留其中残缺的历史或回答；日志记录文件、行号（JSON 数组为元素序号）、原因及跳过数量。公共读取器还会逐行跳过 JSONL 的 JSON/UTF-8 解析错误和非对象记录，并保留有效记录在原文件中的字节偏移；无法解析的整份 JSON 文件会跳过并告警。某个数据源过滤后为空时，混合训练继续使用其余数据源；全部数据源均无有效样本时才停止。无需修改 `datasets.yaml`，也不会改写原始标注。
+离线适配器在建立索引时跳过空回答、缺少必需字段及不支持的角色或内容类型。流式索引只检查 schema、video_ranges 是否存在和媒体路径，不展开时间线、不读取视频尺寸或编码会话；时间线的完整校验在取样时执行，格式错误会报错。公共读取器会跳过 JSONL 的 JSON/UTF-8 解析错误和非对象记录，并保留原文件字节偏移；无法解析的整份 JSON 文件会跳过并告警。索引为空的数据源会从混合数据中跳过，全部为空时停止。原始标注不会改写。
 
 ## 通用离线视频 QA 兼容格式
 
@@ -371,15 +370,21 @@ python examples/streaming_video_sft/prepare_data.py \
   --output /workspace/s/lzw/datasets/Stream-VideoLLM/TrainingData/resolved_train.jsonl
 ```
 
-`paths.json` 需先由使用者填写实际映射；没有映射需要时省略该选项。`--path-replacements` 接受 JSON 对象或 JSON 文件。检查统计中的 `round_samples` 是轮样本数，`sampled_frames` 是各轮采样帧数之和，不包含训练窗口中对历史帧的重复使用。`--output` 只创建新文件，存在时停止，不覆盖原标注。输出仍是 stream-meta-v1，会话不提前展开成海量图片或完整历史样本。
+`paths.json` 需先由使用者填写实际映射；没有映射需要时省略该选项。`--path-replacements` 接受 JSON 对象或 JSON 文件。检查统计中的 `conversation_samples` 是标注会话数，`frame_rounds` 与 `sampled_frames` 是逐帧交互数；这些统计尚未应用 Tokenizer/Processor 的长度过滤。`--output` 只创建新文件，存在时停止，不覆盖原标注。输出仍是 stream-meta-v1，不生成逐轮独立 QA 或预解码图片。
 
 ## 因果性、模板与监督
 
-流式每个训练样本对应一个当前轮。它包含系统提示、窗口内历史轮的图像与对话、当前轮全部图像、已经到达的用户问题，以及当前 assistant 目标。每轮的多帧放在同一个 user 消息中，随后只有一次 assistant 状态及可选回答。默认窗口为含当前轮的 64 轮，即连续完整轮覆盖 64 秒，并由 `video_max_frames=256` 限制为最多 256 帧；只解码本样本所需的当前与历史帧，不将整段未来视频交给视觉编码器。
+流式每条有效标注对应一个完整训练样本：system 后依次放入所有采样帧的 user-assistant 交互。每条 user 消息包含 `<Xs>` 时间戳、当前一帧图像及此时到达的问题；assistant 输出 `</Silence>` 或 `</Response> 回答文本`。不逐轮拆样本，不设置历史窗口，也不使用离线数据的帧数上限。
 
-视频使用 torchcodec 的按播放时间取帧接口，并检查源帧 PTS 不晚于请求时间；帧序列使用 `floor(t * source_fps)`。每帧带自身的 `<Xs>` 时间提示，状态目标对应轮末时间，不采用 Streamo 中非 1 FPS 不一致的 `time-1` 规则。未来问题不会提前注入。窗口删掉历史轮时，只重附已经出现的指令。
+视频使用 torchcodec 的精确按播放时间取帧接口，并检查源帧 PTS 不晚于请求时间；帧序列使用 `floor(t * source_fps)`。每帧带自身的 `<Xs>` 时间提示，不采用 `time-1` 偏移。未来问题不会提前注入。完整会话通过因果注意力训练，各轮只能关注自身及之前的 token；各帧作为独立图像输入视觉编码器。
 
-流式训练只监督当前轮一次 assistant 的状态 Token、回答文本及模板结束符；system、user、所有历史 assistant 都 mask。同一秒内的 4 帧不会各自生成训练样本或重复监督状态。Processor 渲染完整样本与 generation prefix，并核对 prefix Token 完全一致，再生成 Label Mask。超出 Token 预算时只删除完整历史轮，不截断视觉 Token 或当前目标。当前轮全部图像及完整目标仍放不下时明确报错。
+取样时使用 Processor 保存的 [Qwen3-VL 官方模板](https://huggingface.co/Qwen/Qwen3-VL-2B-Instruct/blob/main/chat_template.json)，通过 Tokenizer 做纯文本渲染，再一次编码完整流式会话，根据消息边界定位所有 assistant 正文与结束符。`labels` 默认全部为 `-100`，仅所有 assistant 的状态、回答和结束符保留对应 Token ID；system、user、图像及角色头均不计 loss。`loss_mask` 与 `labels != -100` 保持一致，每轮首个状态 Token 单独标记到 `stream_state_mask`，历史回答同样参与监督。纯文本渲染避开 Processor 对模板未使用的 `enable_thinking` 发出的参数位置警告，离线与推理路径使用同样方式。
+
+`MAX_LENGTH` 限制包含视觉 Token 的完整序列。初始化只扫描标注并建立候选索引。DataLoader 取样后展开逐帧会话，按媒体尺寸计算视觉 Token 数，执行一次 Tokenization 并构造 labels，然后按 `max(len(input_ids), len(labels)) > MAX_LENGTH` 抛出 `MaxLengthError`。合格的同一份编码直接用于后续训练，超长会话整条丢弃；不截断、不删历史、不降采样。只有通过检查的样本才解码完整帧并执行一次视觉预处理，实际网格必须与长度估计一致。处理顺序参考 [Streamo 长度检查](https://github.com/maifoundations/Streamo/blob/main/swift/llm/template/base.py#L1177-L1220)。
+
+默认 `STREAMING_TRUNCATION=filter`，遇到 `MaxLengthError` 后按候选索引确定性补取同一流式数据源的其他会话，参考 [Streamo LazyLLMDataset](https://github.com/maifoundations/Streamo/blob/main/swift/llm/dataset/utils.py)。这样每个 DataLoader 槽位返回一条有效样本，保持各 rank 的 batch 大小和训练步数一致。`STREAMING_MAX_REFETCH=100` 限制每槽最多检查的候选数，全部超长时明确报错；`STREAMING_TRUNCATION=error` 则直接抛出首次超长错误，不补取。其他解码、标注或模板错误都会直接报错。
+
+流式 `len(dataset)`、`max_samples`、sampler 和 epoch 步数均按候选会话槽位计数，补取可能使有效会话在同一 epoch 重复出现。worker 会记住已判定的超长索引以跳过重复编码，首次过滤及每累计 1000 条打印一次日志；这些计数属于当前 worker，不是全局唯一过滤数量。初始化仍需读取各来源的标注并检查路径，整个流程不再做全量流式 Tokenization；每次实际读取的流式候选至多编码一次，不跨 epoch 缓存所有有效编码。
 
 Qwen3-VL 使用项目现有 `get_rope_index`，产生视觉三轴与文本位置的 `[4, L]` 位置编码。训练显式提供位置编码，因此关闭 Processor 的 `mm_token_type_ids`；推理依靠模型自动生成位置编码，保留该字段并在追加 Response Token 时同步扩展。两条路径使用相同时间/消息格式。
 
@@ -396,7 +401,7 @@ gamma 默认 2
 alpha_c = 当前全局 batch 的状态 Token 总数 / (出现的状态类别数 * 类别 c 的数量)
 ```
 
-每个流式轮样本只有一个受监督的状态 Token，类别计数不按轮内帧数重复，也不计入离线 QA。即使离线答案文字包含 `</Silence>` / `</Response>`，其 `stream_state_mask` 仍为零，按普通 NTP Loss 计算。计数在拆 micro-batch 前计算，并跨数据并行组同步，整个梯度累积 batch 使用相同 alpha。Loss 以两类数据的全局实际监督 Token 数共同归一化，再结合 FSDP 的梯度平均缩放；不会对每个 micro-batch 重复平均，也不按总输入长度稀释 loss。`streaming_loss.auto_alpha=false` 可关闭类别平衡。
+每个完整流式会话有多少个逐帧轮次，就有多少个受监督的状态 Token，所有轮次均参与类别计数。离线 QA 的 `stream_state_mask` 全零，即使答案文字包含 `</Silence>` / `</Response>` 也使用普通 CE。计数在拆 micro-batch 前计算，并跨数据并行组同步，整个梯度累积 batch 使用相同 alpha。最终将加权 CE 求和，除以流式与离线数据的全局有效监督 Token 数，再结合 FSDP 的梯度平均缩放；不会按 micro-batch 重复平均，也不按输入总长度稀释 loss。`streaming_loss.auto_alpha=false` 可关闭类别平衡。
 
 ## 训练命令与参数管理
 
@@ -408,8 +413,8 @@ alpha_c = 当前全局 batch 的状态 Token 总数 / (出现的状态类别数 
 | --- | --- |
 | 分布式启动 | `NNODES=1`、`NODE_RANK=0`、`NPROC_PER_NODE=8`、`MASTER_ADDR=127.0.0.1`、`MASTER_PORT=29500` |
 | 数据集入口与路径 | `DATASET_CONFIG`、`STREAMING_ANNOTATIONS`、`STREAMING_VIDEO_ROOT`、`VIDEOCHAT3_ANNOTATION_ROOT`、`VIDEOCHAT3_MEDIA_ROOT` |
-| 抽帧与窗口 | `STREAMING_FPS=4.0`、`ROUND_SECONDS=1.0`、`WINDOW_ROUNDS=64`、`VIDEOCHAT3_FPS=2.0`、`OFFLINE_QA_FPS=1.0` |
-| 帧数与分辨率 | `VIDEO_MAX_FRAMES=256`、`FRAME_MIN_PIXELS=28*28`、`FRAME_MAX_PIXELS=448*448`、`MISSING_MEDIA=skip` |
+| 抽帧与超长处理 | `STREAMING_FPS=4.0`、`STREAMING_TRUNCATION=filter`、`STREAMING_MAX_REFETCH=100`、`VIDEOCHAT3_FPS=2.0`、`OFFLINE_QA_FPS=1.0` |
+| 帧数与分辨率 | 离线视频 `VIDEO_MAX_FRAMES=256`；共享 `FRAME_MIN_PIXELS=28*28`、`FRAME_MAX_PIXELS=448*448`、`MISSING_MEDIA=skip` |
 | 序列与 DataLoader | `MAX_LENGTH=32768`、`USE_DYNAMIC_BSZ=true`、`MAX_TOKEN_LEN_PER_GPU=$MAX_LENGTH`、`NUM_WORKERS=4`、`TRAIN_MAX_SAMPLES=-1` |
 | 模型与加速 | `MODEL_PATH`、`ATTN_IMPLEMENTATION=flash_attention_2`、`USE_LIGER=true`、`USE_FUSED_KERNELS=true`、`FUSED_KERNEL_BACKEND=triton`、`GRADIENT_CHECKPOINTING=true` |
 | 训练与优化器 | `GLOBAL_BATCH_SIZE=128`、`MICRO_BATCH_SIZE=1`、`EPOCHS=1`、`TOTAL_TRAINING_STEPS=null`、`LEARNING_RATE=1e-5`、`WARMUP_STEPS=200`、`WARMUP_RATIO=0.0`、`LR_SCHEDULER=cosine`、`WEIGHT_DECAY=0.01`、`CLIP_GRAD=1.0`、`SEED=1` |
@@ -433,7 +438,7 @@ VIDEOCHAT3_ANNOTATION_ROOT=/workspace/s/lzw/datasets/VideoChat3/videochat3_data_
 VIDEOCHAT3_MEDIA_ROOT=/workspace/s/lzw/datasets/VideoChat3/media
 ```
 
-`datasets.yaml` 继续管理数据源列表、启用状态、模态、标注相对名称、重复次数和来源特例。混合加载器为清单提供运行时 `data` 配置，清单中的 `${data.*}` 引用会在加载时解析。例如 `${data.streaming_video.fps}` 使用脚本设置的流式 FPS，`${data.videochat3.annotation_root}` 使用脚本设置的标注根目录。当前清单的通用 FPS、窗口、帧数与路径均已改成引用；Atomic 4/8/30 FPS 和 MotionBench 4 FPS 保留各自数值。自定义清单若填写固定数值，会覆盖对应全局设置；希望随脚本变化时使用同样的引用格式。
+`datasets.yaml` 继续管理数据源列表、启用状态、模态、标注相对名称、重复次数和来源特例。混合加载器为清单提供运行时 `data` 配置，清单中的 `${data.*}` 引用会在加载时解析。例如 `${data.streaming_video.fps}` 使用脚本设置的流式 FPS，`${data.videochat3.annotation_root}` 使用脚本设置的标注根目录。通用 FPS、离线帧数上限、流式超长处理和路径均使用引用；Atomic 4/8/30 FPS 和 MotionBench 4 FPS 保留各自数值。自定义清单若填写固定数值，会覆盖对应全局设置；希望随脚本变化时使用同样的引用格式。
 
 先抽查流式标注与真实路径，去掉 `--limit-sessions 128` 可检查全部会话：
 
@@ -510,9 +515,8 @@ datasets:
     repeat: 1
     options:
       fps: ${data.streaming_video.fps}
-      round_seconds: ${data.streaming_video.round_seconds}
-      window_rounds: ${data.streaming_video.window_rounds}
-      video_max_frames: ${data.streaming_video.video_max_frames}
+      truncation: ${data.streaming_video.truncation}
+      max_refetch: ${data.streaming_video.max_refetch}
       missing_video: ${data.streaming_video.missing_video}
 ```
 
@@ -601,15 +605,23 @@ uv run --frozen --extra fsdp bash examples/streaming_video_sft/train.sh \
   optim.lr=5e-6
 ```
 
-`VIDEO_MAX_FRAMES` 与 `FRAME_MIN_PIXELS/FRAME_MAX_PIXELS` 通过 `data.video_max_frames`、`data.frame_min_pixels`、`data.frame_max_pixels` 传入三类数据适配器。默认分别为 256、784、200704；像素值是面积预算，实际宽高按 Processor 网格对齐。VideoChat3 图片 QA 仍用独立的 `data.videochat3.min_pixels/max_pixels`，默认 4096 / 147456。
+`VIDEO_MAX_FRAMES` 通过 `data.video_max_frames` 仅限制离线视频 QA 和 VideoChat3 视频，默认 256，流式会话不设帧数上限。共享的 `FRAME_MIN_PIXELS/FRAME_MAX_PIXELS` 默认 784 / 200704，是逐帧像素面积预算，实际宽高按 Processor 网格对齐。VideoChat3 图片 QA 仍用独立的 `data.videochat3.min_pixels/max_pixels`，默认 4096 / 147456。
 
-256 是帧数上限，不是每个样本固定使用 256 帧。`MAX_LENGTH` 仍限制完整输入序列：流式超限时删除最早完整历史轮，离线均匀减少视频帧，不裁掉当前轮或完整监督答案。静态模式下 `MAX_TOKEN_LEN_PER_GPU` 不参与 micro-batch 划分；动态模式下它必须能容纳当前最长样本。
+`MAX_LENGTH` 限制完整输入序列：流式超限默认过滤整条会话；离线继续均匀减少视频帧，并保留完整监督答案。训练参数 `ROUND_SECONDS`、`WINDOW_ROUNDS` 已移除；旧清单中的对应选项应删除。静态模式下 `MAX_TOKEN_LEN_PER_GPU` 不参与 micro-batch 划分；动态模式下它必须能容纳过滤后的最长样本。
+
+流式、离线 QA 和 VideoChat3 均先根据图像尺寸计算视觉 token 长度，再对保留图片执行一次视觉预处理。流式完整会话使用一次文本编码生成全轮监督掩码；离线完整对话和监督前缀复用相同的视觉 token 长度并核对前缀。实际 `image_grid_thw` 必须与预估一致。
+
+动态模式默认启用 `LENGTH_BUCKET_MICRO_BATCHES=true`，按长度的 2 次幂区间分桶，将相近长度样本放入同一 micro-batch，同时约束有效 token 总数、补齐后的 `batch_size × max_seq_len` 和未合并的视觉 patch 数。`MAX_PADDED_TOKEN_LEN_PER_GPU` 默认等于 `MAX_TOKEN_LEN_PER_GPU`，`MAX_VISION_PATCHES_PER_GPU` 在脚本中默认为其四倍；直接使用 YAML 时视觉预算默认为 131072。超预算的单个样本或不可拆分组会报错，不会删帧或裁剪目标。各 rank 同步 micro-batch 数量，额外拆分保持每个 micro-batch 非空。上述预算只在启用长度分桶的动态模式下生效。
+
+`SFT_SUPERVISED_ONLY=true` 默认只在监督 token 对应的前一位置执行词表投影和 log-prob 计算，并跳过 entropy 的前向与反向计算；完整上下文继续参与 Transformer 和视觉编码器的训练。流式的监督位置包括所有 assistant 轮次，开关不改变监督范围。Triton 后端使用 log-prob 专用分支；torch/liger 后端使用分块 linear/CE。输出恢复为原有 token 布局，状态 focal loss、普通答案 CE、全局监督 token 分母和类别权重保持不变。MFU 估算中的输出头部分按监督 token 数计数。
+
+比较原组批和完整输出头路径时，可设置 `LENGTH_BUCKET_MICRO_BATCHES=false SFT_SUPERVISED_ONLY=false`；保持相同的全局 batch、FPS、像素预算与数据清单。新增路径目前只做静态检查，尚未在服务器验证数值、吞吐和 GPU 满载情况。
 
 需要验证时设置 `VAL_DATASET_CONFIG=/实际路径/validation_datasets.yaml TEST_FREQ=100`，验证清单使用同样格式。`data.train_files` 默认引用 `data.dataset_config`。旧字段 `max_frames`、视频 `min_pixels/max_pixels` 仍可作为兼容入口；同时填写时新字段优先。
 
 直接调用 Python 入口时使用 YAML 配置默认值，需要自行通过 torchrun 启动；自动日期目录和 TensorBoard 目录由 `train.sh` 设置。
 
-## 按秒轮主动推理 Demo
+## 逐帧主动推理 Demo
 
 ```bash
 "$PYTHON_BIN" examples/streaming_video_sft/infer.py \
@@ -617,18 +629,18 @@ uv run --frozen --extra fsdp bash examples/streaming_video_sft/train.sh \
   --video /实际存在的本地视频.mp4 \
   --question '持续观察视频，当出现需要报告的新事件时主动回答。' \
   --question-time 0 \
-  --fps 4 --round-seconds 1 --window-rounds 64 --video-max-frames 256 --max-context-tokens 8192 \
+  --fps 4 --window-rounds 64 --video-max-frames 256 --max-context-tokens 8192 \
   --frame-min-pixels 784 --frame-max-pixels 200704 \
   --output /新建的输出目录/stream_predictions.jsonl
 ```
 
 视频与输出路径是需要替换的命令示例，不是代码推造的媒体路径。`--model` 必须是带训练后特殊 Token 和权重的 HF 目录，不能用原始基础模型代替。问题省略时从终端输入；`--question-time` 控制何时到达，之前不会注入。`--start` / `--end` 选择回放范围，`--max-rounds` 可限制轮数，`--realtime` 按视频时钟等待，`--device` / `--device-map` / `--dtype` 控制加载。
 
-每轮先一起输入本轮多帧，再在两个状态 Token 的 logits 中选择一次状态。状态一确定，控制台与可选 JSONL 就立即输出 `event="state"`，不等待整段答案生成。Silence 该轮到此结束；Response 随后才生成答案，并抑制再次生成状态 Token，按 EOS 或 `--max-new-tokens` 结束。
+每轮输入当前一帧，再在两个状态 Token 的 logits 中选择一次状态。状态一确定，控制台与可选 JSONL 就立即输出 `event="state"`，不等待整段答案生成。Silence 该轮到此结束；Response 随后才生成答案，并抑制再次生成状态 Token，按 EOS 或 `--max-new-tokens` 结束。
 
 Response 完成后另外输出 `event="answer"`；同一轮只有 state 事件含 `state` 字段，answer 事件不重复状态。state 事件记录 `start`、轮末 `timestamp`、本轮 `frame_timestamps`、`context_rounds`、`context_frames` 和 `input_tokens`；answer 事件记录 `answer` 与 `answer_truncated`。两个事件通过视频及轮末 `timestamp` 对应。输出文件只新建，不覆盖。
 
-默认采样频率、轮时长、窗口、像素和消息格式与训练一致；训练修改这些参数时，推理需同步对应选项。可用 `--system-prompt-file` 指定与训练相同的自定义提示。窗口会按 Token 预算继续删除整轮历史；被删除的图像没有长期摘要或额外记忆。每轮重新计算窗口前缀，未增加跨轮 KV 缓存优化。4 FPS 表示输入采样频率，`--realtime` 表示按时钟等待；实际处理速度尚未测量，不能据此保证实时生成。
+默认 FPS、像素和逐帧消息格式与训练一致，可用 `--system-prompt-file` 指定相同的自定义提示。Demo 的 `--window-rounds`、`--video-max-frames` 和 Token 预算仅用于限制推理上下文，不影响完整会话训练。推理仍按预算删除整轮历史，并逐轮重算前缀，未增加跨轮 KV 缓存。4 FPS 表示每秒四次逐帧状态决策，`--realtime` 表示按时钟等待；实际处理速度尚未测量。
 
 ## 参考依据与验证范围
 
@@ -636,14 +648,8 @@ Response 完成后另外输出 `event="answer"`；同一轮只有 state 事件�
 
 数据字段与任务按本地 `annotations_refinev2`、`docs/VideoLLM-Stream设计方案.md` 及 `docs/数据集.xlsx` 表二核对。标注检查、Python 语法/静态接口和启动脚本检查在本地完成；未安装任何依赖或运行 GPU 训练。服务器模型路径、真实视频解码、完整分布式反向、HF Checkpoint 再加载及生成质量尚需在服务器执行上面的短跑命令验证。没有增加测试文件、评测系统或部署组件。
 
-本轮混合训练修改的 5 个 Python 文件通过 AST、120 列、尾随空白及冲突标记检查，更新后的 `train.sh` 通过 `bash -n`。已静态核对清单加载、两类样本 Tensor 字段、micro-batch 拆分及 `stream_state_mask` 对 Focal/CE 的门控链路。当前本地没有 Torch、Transformers、OmegaConf 或 YAML 解析运行环境；未安装包，也未执行真实混合 DataLoader、Hydra 配置组合、视频解码、反向或 GPU 训练。YAML 清单与配置仅人工核对。
+2026-10-22 的完整会话训练改为 DataLoader 内单次编码与懒过滤，保留全轮状态监督、Focal/CE 与全局 Token 归一化。3 个修改的 Python 文件通过 AST/编译、符号引用、120 列和空白检查，`train.sh` 通过 `bash -n`；已静态核对初始化没有完整会话预处理调用、流式会话只有一个文本编码调用点，以及参数引用。未运行项目代码、测试或训练，未创建测试文件、安装依赖或新环境。真实模板编码、媒体解码、混合 DataLoader、分布式反向、数值与吞吐尚未实测。
 
-2026-10-20 的 VideoChat3 适配已读取官方 210 个 JSONL 文件各自的首条记录，观察到的内容形式为字符串及 text/image_url/video_url 列表；这是格式抽查，未全量验证所有记录。来源映射覆盖全部 210 个已发布标注文件，默认 glob 选择其中 194 个（图片 177、文本 8、Motion 4、普通视频 5）。4 个新增/修改 Python 文件通过 AST、120 列和空白检查，来源映射 JSON 可解析；静态复核了纯文本空多模态输入、多图顺序、tar/解压资源路径、`stream_state_mask` 全零及当前 assistant Label Mask。未执行项目代码、真实媒体解码、Tokenizer/Processor 编码、混合 DataLoader、Hydra 配置组合或 GPU 训练；未新增测试文件或安装依赖。
+2026-10-20 的 VideoChat3 适配曾读取官方 210 个 JSONL 各自的首条记录，观察到字符串及 text/image_url/video_url 列表；这是格式抽查，未全量验证所有记录。来源映射覆盖全部 210 个已发布标注文件，当前启用项以 `datasets.yaml` 为准。
 
-此前流式 4 FPS 适配的 3 个 Python 文件通过 AST 与空白检查，推理 CLI `--help` 通过。按默认 `fps=4`、`round_seconds=1`，从 67 个 JSONL 各取首条非空会话，共检查 64 条会话、7177 个轮样本、28708 帧；其中 Silence 6299 轮、Response 878 轮，3 个文件为空，无解析失败。0–2 秒精确产生 2 轮、8 帧，没有 0 秒单帧额外决策。旧版逐帧模式的样本计数不适用于当前版本。上述检查仅覆盖流式数据逻辑，不替代混合数据的 GPU、Tokenizer/Processor 真实编码或视频解码运行验证。
-
-既有原始标注字段扫描覆盖 195388 条会话，包含 2143221 个 Silence 与 3937563 个 Response 标注，未发现未知状态、缺失的必要时间字段或空 Response 文本；这些是标注数量，不是新模式的轮样本数。没有生成任何 Standby 监督。
-
-当前训练入口已切换到 `annotations_curated`。此前只读检查覆盖 67 个 JSONL、192901 条会话，全部通过现有解析器的 4 FPS / 每秒一轮构造校验，共 17270605 个轮样本；3 个空文件被忽略。视频路径均为非空的 `videos/...` 相对路径。该结果只验证标注格式和轮次构造，尚未核实服务器媒体是否存在、能否解码及真实时长。
-
-2026-10-21 的使用文档更新补充了 uv 环境管理和训练命令。文档中的 Bash 命令通过 `bash -n` 语法检查，内嵌 Python 通过 AST 检查；依赖版本、数据和输出路径及 CLI 选项按当前文件静态核对。没有创建环境、安装依赖或执行 GPU 训练。
+当前训练入口使用 `annotations_curated`。此前只读标注检查覆盖 67 个 JSONL、192901 条会话，视频路径为非空的 `videos/...` 相对路径，3 个文件为空。旧版按秒分轮、逐轮拆样本的计数不代表当前逐帧轮数或有效会话数；初始化日志报告候选数量，超长过滤数量在实际取样时记录。

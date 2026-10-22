@@ -22,19 +22,23 @@ STREAMING_ANNOTATIONS="${STREAMING_ANNOTATIONS:-$STREAMING_VIDEO_ROOT/annotation
 VIDEOCHAT3_ANNOTATION_ROOT="${VIDEOCHAT3_ANNOTATION_ROOT:-/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations}"
 VIDEOCHAT3_MEDIA_ROOT="${VIDEOCHAT3_MEDIA_ROOT:-/workspace/s/lzw/datasets/VideoChat3/media}"
 STREAMING_FPS="${STREAMING_FPS:-4.0}"
-ROUND_SECONDS="${ROUND_SECONDS:-1.0}"
-WINDOW_ROUNDS="${WINDOW_ROUNDS:-64}"
+STREAMING_TRUNCATION="${STREAMING_TRUNCATION:-filter}"
+STREAMING_MAX_REFETCH="${STREAMING_MAX_REFETCH:-100}"
 VIDEOCHAT3_FPS="${VIDEOCHAT3_FPS:-2.0}"
 OFFLINE_QA_FPS="${OFFLINE_QA_FPS:-1.0}"
+# Offline video QA only; streaming keeps every sampled frame.
 VIDEO_MAX_FRAMES="${VIDEO_MAX_FRAMES:-256}"
 FRAME_MIN_PIXELS="${FRAME_MIN_PIXELS:-$((28 * 28))}"
 FRAME_MAX_PIXELS="${FRAME_MAX_PIXELS:-$((448 * 448))}"
 MISSING_MEDIA="${MISSING_MEDIA:-skip}"
 
 # Input length and DataLoader; token budget controls dynamic micro-batches.
-MAX_LENGTH="${MAX_LENGTH:-32768}"
+MAX_LENGTH="${MAX_LENGTH:-49152}"
 USE_DYNAMIC_BSZ="${USE_DYNAMIC_BSZ:-true}"
 MAX_TOKEN_LEN_PER_GPU="${MAX_TOKEN_LEN_PER_GPU:-$MAX_LENGTH}"
+LENGTH_BUCKET_MICRO_BATCHES="${LENGTH_BUCKET_MICRO_BATCHES:-true}"
+MAX_PADDED_TOKEN_LEN_PER_GPU="${MAX_PADDED_TOKEN_LEN_PER_GPU:-$MAX_TOKEN_LEN_PER_GPU}"
+MAX_VISION_PATCHES_PER_GPU="${MAX_VISION_PATCHES_PER_GPU:-$((MAX_TOKEN_LEN_PER_GPU * 4))}"
 NUM_WORKERS="${NUM_WORKERS:-4}"
 TRAIN_MAX_SAMPLES="${TRAIN_MAX_SAMPLES:--1}"
 VAL_DATASET_CONFIG="${VAL_DATASET_CONFIG:-null}"
@@ -72,6 +76,7 @@ OPTIMIZER_OFFLOAD="${OPTIMIZER_OFFLOAD:-false}"
 OFFLOAD_POLICY="${OFFLOAD_POLICY:-false}"
 
 # State-token focal loss; ordinary answers retain cross entropy.
+SFT_SUPERVISED_ONLY="${SFT_SUPERVISED_ONLY:-true}"
 FOCAL_GAMMA="${FOCAL_GAMMA:-2.0}"
 AUTO_ALPHA="${AUTO_ALPHA:-true}"
 
@@ -121,8 +126,8 @@ exec "$PYTHON_BIN" -m torch.distributed.run \
   "data.videochat3.annotation_root=$VIDEOCHAT3_ANNOTATION_ROOT" \
   "data.videochat3.video_root=$VIDEOCHAT3_MEDIA_ROOT" \
   "data.streaming_video.fps=$STREAMING_FPS" \
-  "data.streaming_video.round_seconds=$ROUND_SECONDS" \
-  "data.streaming_video.window_rounds=$WINDOW_ROUNDS" \
+  "data.streaming_video.truncation=$STREAMING_TRUNCATION" \
+  "data.streaming_video.max_refetch=$STREAMING_MAX_REFETCH" \
   "data.videochat3.fps=$VIDEOCHAT3_FPS" \
   "data.offline_video_qa.fps=$OFFLINE_QA_FPS" \
   "data.video_max_frames=$VIDEO_MAX_FRAMES" \
@@ -134,6 +139,9 @@ exec "$PYTHON_BIN" -m torch.distributed.run \
   "data.max_length=$MAX_LENGTH" \
   "data.use_dynamic_bsz=$USE_DYNAMIC_BSZ" \
   "data.max_token_len_per_gpu=$MAX_TOKEN_LEN_PER_GPU" \
+  "data.length_bucket_micro_batches=$LENGTH_BUCKET_MICRO_BATCHES" \
+  "data.max_padded_token_len_per_gpu=$MAX_PADDED_TOKEN_LEN_PER_GPU" \
+  "data.max_vision_patches_per_gpu=$MAX_VISION_PATCHES_PER_GPU" \
   "data.num_workers=$NUM_WORKERS" \
   "data.train_max_samples=$TRAIN_MAX_SAMPLES" \
   "data.val_files=$VAL_DATASET_CONFIG" \
@@ -164,6 +172,7 @@ exec "$PYTHON_BIN" -m torch.distributed.run \
   "engine.optimizer_offload=$OPTIMIZER_OFFLOAD" \
   "engine.offload_policy=$OFFLOAD_POLICY" \
   "streaming_loss.gamma=$FOCAL_GAMMA" \
+  "streaming_loss.supervised_only=$SFT_SUPERVISED_ONLY" \
   "streaming_loss.auto_alpha=$AUTO_ALPHA" \
   "trainer.project_name=$PROJECT_NAME" \
   "trainer.experiment_name=$EXPERIMENT_NAME" \

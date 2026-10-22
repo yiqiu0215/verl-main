@@ -1386,6 +1386,12 @@ class FSDPEngineWithLMHead(FSDPEngine):
 
         input_ids = micro_batch["input_ids"]
 
+        if output_args.get("sft_supervised_only", False):
+            offsets = input_ids.offsets()
+            mask = torch.arange(output.log_probs.shape[1], device=output.log_probs.device) < offsets.diff().unsqueeze(1)
+            log_probs = torch.nested.nested_tensor_from_jagged(output.log_probs[mask], offsets)
+            return {"log_probs": log_probs}
+
         if use_remove_padding:
             input_ids_rmpad_rolled = output_args["input_ids_rmpad_rolled"]
             temperature_rmpad = output_args["temperature_rmpad"]
@@ -1582,9 +1588,24 @@ class FSDPEngineWithLMHead(FSDPEngine):
 
     def forward_step(self, micro_batch: TensorDict, loss_function, forward_only):
         device_name = get_device_name()
+        sft_head_inputs = None
+        if tu.get_non_tensor_data(micro_batch, "sft_supervised_only", False):
+            if tu.get_non_tensor_data(micro_batch, "calculate_entropy", False):
+                raise ValueError("Supervised-only SFT does not compute entropy")
+            packed_ids = micro_batch["input_ids"]
+            offsets = packed_ids.offsets()
+            max_seq_len = int(offsets.diff().max().item())
+            target_indices = micro_batch["loss_mask"].values().bool().nonzero(as_tuple=True)[0]
+            rows = torch.searchsorted(offsets[1:].contiguous(), target_indices, right=True)
+            predictor_indices = rows * max_seq_len + target_indices - offsets[rows] - 1
+            sft_head_inputs = torch.stack((predictor_indices, packed_ids.values()[target_indices]))
         # actually, we should avoid assigning like this...
         micro_batch = micro_batch.to(get_device_id())
         model_inputs, output_args = self.prepare_model_inputs(micro_batch=micro_batch)
+        if sft_head_inputs is not None:
+            sft_head_inputs = sft_head_inputs.to(get_device_id())
+            model_inputs.update(sft_logit_indices=sft_head_inputs[0], sft_targets=sft_head_inputs[1])
+            output_args["sft_supervised_only"] = True
 
         # Honor mixed_precision.param_dtype resolved during FSDP setup. When dtype is fp32,
         # autocast is a no-op at best and a footgun at worst, so skip it entirely.

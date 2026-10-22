@@ -179,7 +179,9 @@ class TrainingWorker(Worker, DistProfilerExtension):
         """
         self.engine.initialize()
 
-    def _postprocess_output(self, output, *, global_token_num, delta_time, forward_only, images_seqlens):
+    def _postprocess_output(
+        self, output, *, global_token_num, delta_time, forward_only, images_seqlens, lm_head_tokens=None,
+    ):
         """
 
         Args:
@@ -229,7 +231,7 @@ class TrainingWorker(Worker, DistProfilerExtension):
         # compute mfu
         if global_token_num is not None and self.flops_counter is not None:
             estimated_flops, promised_flops = self.flops_counter.estimate_flops(
-                global_token_num, delta_time, images_seqlens=images_seqlens
+                global_token_num, delta_time, images_seqlens=images_seqlens, lm_head_tokens=lm_head_tokens
             )
             final_metrics["mfu"] = estimated_flops / promised_flops / torch.distributed.get_world_size()
             if forward_only:
@@ -389,6 +391,10 @@ class TrainingWorker(Worker, DistProfilerExtension):
                 delta_time=delta_time,
                 forward_only=False,
                 images_seqlens=images_seqlens,
+                lm_head_tokens=(
+                    tu.get_non_tensor_data(data, "batch_num_tokens", None)
+                    if tu.get_non_tensor_data(data, "sft_supervised_only", False) else None
+                ),
             ).cpu()
         else:
             final_output = None
@@ -435,6 +441,10 @@ class TrainingWorker(Worker, DistProfilerExtension):
                 delta_time=delta_time,
                 forward_only=True,
                 images_seqlens=images_seqlens,
+                lm_head_tokens=(
+                    tu.get_non_tensor_data(data, "batch_num_tokens", None)
+                    if tu.get_non_tensor_data(data, "sft_supervised_only", False) else None
+                ),
             ).cpu()
         else:
             final_output = None

@@ -26,7 +26,7 @@ def _sample_limit(value, name):
 
 
 class MixedVideoSFTDataset:
-    """Concatenate streaming rounds and ordinary offline QA, preserving their own label masks."""
+    """Concatenate full streaming conversations and ordinary offline QA with their own label masks."""
 
     def __init__(self, parquet_files, tokenizer, config, processor=None, max_samples=-1):
         data_config = (

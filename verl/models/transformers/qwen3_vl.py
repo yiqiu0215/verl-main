@@ -304,6 +304,38 @@ class Qwen3VLCausalLMOutputForPPO(Qwen3VLCausalLMOutputWithPast):
     entropy: Optional[torch.FloatTensor] = None
 
 
+def _sft_head_forward(model, outputs, indices, targets, temperature, backend):
+    hidden_states = outputs[0]
+    selected = hidden_states.flatten(0, 1).index_select(0, indices).contiguous()
+    if backend is None:
+        logits = model.lm_head(selected)
+        if isinstance(logits, DTensor):
+            logits = logits.full_tensor()
+        if temperature != 1.0:
+            logits = logits / temperature
+        log_probs = -torch.nn.functional.cross_entropy(logits.float(), targets, reduction="none")
+    else:
+        weights = model.lm_head.weight
+        if isinstance(weights, DTensor):
+            weights = weights.full_tensor().to(selected.device)
+        if backend == "triton":
+            from verl.utils.kernel.linear_cross_entropy import linear_cross_entropy
+
+            log_probs, _ = linear_cross_entropy(
+                selected, weights.contiguous(), targets.contiguous(), temperature, "none", None, False,
+            )
+        else:
+            from verl.utils.experimental.torch_functional import FusedLinearForPPO
+
+            log_probs, _ = FusedLinearForPPO(impl_backend=backend)(
+                selected, weights, targets, temperature=temperature, compute_entropy=False,
+            )
+    # Keep the engine's token-aligned output contract without evaluating the vocabulary head on masked positions.
+    shape = hidden_states.shape[:-1]
+    dense_log_probs = log_probs.new_zeros(shape).flatten().index_copy(0, indices, log_probs).view(shape)
+    return Qwen3VLCausalLMOutputForPPO(log_probs=dense_log_probs, hidden_states=outputs.hidden_states)
+
+
 def qwen3_vl_base_forward(
     self: "Qwen3VLForConditionalGeneration",
     input_ids: torch.LongTensor,
@@ -329,9 +361,13 @@ def forward_with_normal_backend(
     input_ids: torch.LongTensor = None,
     labels: Optional[torch.LongTensor] = None,
     temperature: float = 1.0,
+    sft_logit_indices: Optional[torch.LongTensor] = None,
+    sft_targets: Optional[torch.LongTensor] = None,
     **kwargs,
 ) -> "Qwen3VLCausalLMOutputForPPO":
     outputs = self.model(input_ids, **kwargs)
+    if sft_logit_indices is not None:
+        return _sft_head_forward(self, outputs, sft_logit_indices, sft_targets, temperature, None)
     hidden_states = outputs[0]
     logits = self.lm_head(hidden_states)
 
@@ -347,11 +383,18 @@ def forward_with_torch_backend(
     labels: Optional[torch.LongTensor] = None,
     temperature: float = 1.0,
     shift_labels: Optional[torch.LongTensor] = None,
+    sft_logit_indices: Optional[torch.LongTensor] = None,
+    sft_targets: Optional[torch.LongTensor] = None,
     **kwargs,
 ) -> "Qwen3VLCausalLMOutputForPPO":
     from verl.utils.experimental.torch_functional import FusedLinearForPPO
 
     outputs = self.model(input_ids, **kwargs)
+    if sft_logit_indices is not None:
+        return _sft_head_forward(
+            self, outputs, sft_logit_indices, sft_targets, temperature,
+            getattr(self, "_verl_fused_kernels_backend", "torch"),
+        )
     hidden_states = outputs[0]
 
     # Loss calculations. `shift_labels` (when provided by the engine) is the
@@ -390,11 +433,15 @@ def forward_with_triton_backend(
     labels: Optional[torch.LongTensor] = None,
     temperature: float = 1.0,
     shift_labels: Optional[torch.LongTensor] = None,
+    sft_logit_indices: Optional[torch.LongTensor] = None,
+    sft_targets: Optional[torch.LongTensor] = None,
     **kwargs,
 ) -> "Qwen3VLCausalLMOutputForPPO":
     from verl.utils.kernel.linear_cross_entropy import linear_cross_entropy
 
     outputs = self.model(input_ids, **kwargs)
+    if sft_logit_indices is not None:
+        return _sft_head_forward(self, outputs, sft_logit_indices, sft_targets, temperature, "triton")
     hidden_states = outputs[0]
 
     # Loss calculations. See `forward_with_torch_backend` for the `shift_labels`

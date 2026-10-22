@@ -1,4 +1,4 @@
-"""State-token focal loss for streaming rounds and ordinary NTP loss for offline QA."""
+"""State-token focal loss for full streaming conversations and ordinary CE for answer tokens."""
 
 import torch
 from tensordict import TensorDict
@@ -8,7 +8,7 @@ from verl.utils.device import get_device_id
 
 
 class StreamSFTLoss:
-    def __init__(self, state_token_ids, gamma=2.0, auto_alpha=True):
+    def __init__(self, state_token_ids, gamma=2.0, auto_alpha=True, supervised_only=True):
         if not state_token_ids or len(set(state_token_ids)) != len(state_token_ids):
             raise ValueError("Streaming SFT requires nonempty, distinct single-token state IDs")
         if gamma < 0:
@@ -16,12 +16,18 @@ class StreamSFTLoss:
         self.state_token_ids = tuple(state_token_ids)
         self.gamma = float(gamma)
         self.auto_alpha = bool(auto_alpha)
+        self.supervised_only = bool(supervised_only)
 
     @torch.no_grad()
     def prepare_batch(self, data: TensorDict, dp_group=None):
         input_ids = data["input_ids"]
+        labels = data["labels"].values()
         loss_mask = data["loss_mask"].values().bool()
         state_mask = data["stream_state_mask"].values().bool()
+        if not torch.equal(labels != -100, loss_mask) or not torch.equal(
+            labels[loss_mask], input_ids.values()[loss_mask]
+        ):
+            raise ValueError("SFT labels must match input_ids at supervised tokens and be -100 everywhere else")
         if (state_mask & ~loss_mask).any():
             raise ValueError("Streaming state targets must also be included in loss_mask")
         if loss_mask[input_ids.offsets()[:-1]].any():
@@ -31,7 +37,7 @@ class StreamSFTLoss:
 
         alpha = torch.ones(len(self.state_token_ids), dtype=torch.float32, device=get_device_id())
         if self.auto_alpha:
-            targets = input_ids.values()[state_mask]
+            targets = labels[state_mask]
             counts = torch.stack([(targets == token_id).sum() for token_id in self.state_token_ids])
             counts = counts.to(device=get_device_id(), dtype=torch.float32)
             torch.distributed.all_reduce(counts, op=torch.distributed.ReduceOp.SUM, group=dp_group)
@@ -40,11 +46,12 @@ class StreamSFTLoss:
 
         # One set of global class weights is shared by every accumulated micro-batch.
         tu.assign_non_tensor_data(data, "stream_class_alpha", tuple(alpha.tolist()))
+        tu.assign_non_tensor_data(data, "sft_supervised_only", self.supervised_only)
 
     def __call__(self, model_output, data: TensorDict, dp_group=None):
         log_probs = model_output["log_probs"].values().float()
-        targets = torch.roll(data["input_ids"].values(), shifts=-1, dims=0)
-        loss_mask = torch.roll(data["loss_mask"].values().bool(), shifts=-1, dims=0)
+        targets = torch.roll(data["labels"].values(), shifts=-1, dims=0)
+        loss_mask = targets != -100
         state_mask = torch.roll(data["stream_state_mask"].values().bool(), shifts=-1, dims=0)[loss_mask]
         log_probs = log_probs[loss_mask]
         targets = targets[loss_mask]

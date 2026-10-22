@@ -54,6 +54,7 @@ class StreamingSFTTrainer(SFTTrainer):
             self.state_token_ids,
             gamma=loss_config.get("gamma", 2.0),
             auto_alpha=loss_config.get("auto_alpha", True),
+            supervised_only=loss_config.get("supervised_only", True),
         )
         self.training_client.set_loss_fn(self.loss_fn)
 

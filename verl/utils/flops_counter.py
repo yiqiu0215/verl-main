@@ -148,6 +148,9 @@ def _estimate_qwen3_vl_flops(config, tokens_sum, batch_seqlens, delta_time, **ka
     dense_N_flops = 6 * dense_N * tokens_sum
 
     # qwen3_vl uses deepstack to merge visual embeds and text embeds, but it has no tensor operation.
+    lm_head_tokens = kargs.get("lm_head_tokens", None)
+    if lm_head_tokens is not None:
+        dense_N_flops -= 6 * vocab_size * hidden_size * (tokens_sum - lm_head_tokens)
 
     # attn all_layer & all_token fwd & bwd flops
     seqlen_square_sum = 0
@@ -196,6 +199,9 @@ def _estimate_qwen3_vl_moe_flops(config, tokens_sum, batch_seqlens, delta_time, 
     moe_N = (moe_gata_N + moe_expertmlp_N + attn_linear_N) * (num_hidden_layers) + emd_and_lm_head_N
     # non-attn all_layer & all_token fwd & bwd flops
     dense_N_flops = 6 * moe_N * tokens_sum
+    lm_head_tokens = kargs.get("lm_head_tokens", None)
+    if lm_head_tokens is not None:
+        dense_N_flops -= 6 * vocab_size * hidden_size * (tokens_sum - lm_head_tokens)
 
     # attn all_layer & all_token fwd & bwd flops
     seqlen_square_sum = 0

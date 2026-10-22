@@ -9,9 +9,8 @@ datasets:
     repeat: 1
     options:
       fps: ${data.streaming_video.fps}
-      round_seconds: ${data.streaming_video.round_seconds}
-      window_rounds: ${data.streaming_video.window_rounds}
-      video_max_frames: ${data.streaming_video.video_max_frames}
+      truncation: ${data.streaming_video.truncation}
+      max_refetch: ${data.streaming_video.max_refetch}
       missing_video: ${data.streaming_video.missing_video}
 
   - name: "videochat3_STEM_AI2D_GPT4V_train_0-0_merged_5507"

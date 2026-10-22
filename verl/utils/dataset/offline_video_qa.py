@@ -16,6 +16,7 @@ from verl.utils.dataset.streaming_video import (
     load_path_mapping,
     resolve_video_path,
 )
+from verl.utils.dataset.video_sft_processing import encode_image_text, image_token_lengths, process_sft_images
 
 logger = logging.getLogger(__name__)
 DEFAULT_SYSTEM_PROMPT = "You are a helpful video assistant. Answer the user's question based on the video."
@@ -211,27 +212,30 @@ class OfflineVideoQASFTDataset:
         import torch
         import torch.nn.functional as F
 
-        text = self.processor.apply_chat_template(
-            messages, tokenize=False, add_generation_prompt=False, **self.chat_kwargs
+        text = self.tokenizer.apply_chat_template(
+            messages, chat_template=self.processor.chat_template,
+            tokenize=False, add_generation_prompt=False, **self.chat_kwargs,
         )
-        prefix = self.processor.apply_chat_template(
-            messages[:-1], tokenize=False, add_generation_prompt=True, **self.chat_kwargs
-        )
-        processor_kwargs = dict(return_tensors="pt", add_special_tokens=False, return_mm_token_type_ids=False)
-        if images:
-            processor_kwargs.update(images=images, **(self.image_kwargs if image_kwargs is None else image_kwargs))
-        inputs = dict(self.processor(text=[text], **processor_kwargs))
+        image_kwargs = self.image_kwargs if image_kwargs is None else image_kwargs
+        image_lengths = image_token_lengths(self.processor, images, image_kwargs)
+        inputs = encode_image_text(self.processor, text, image_lengths)
         input_ids = inputs.pop("input_ids")[0]
         attention_mask = inputs.pop("attention_mask")[0]
         if len(input_ids) > self.max_length:
             return None
-        prefix_ids = self.processor(text=[prefix], **processor_kwargs)["input_ids"][0]
+        prefix = self.tokenizer.apply_chat_template(
+            messages[:-1], chat_template=self.processor.chat_template,
+            tokenize=False, add_generation_prompt=True, **self.chat_kwargs,
+        )
+        prefix_ids = encode_image_text(self.processor, prefix, image_lengths)["input_ids"][0]
         if not torch.equal(input_ids[: len(prefix_ids)], prefix_ids):
             raise ValueError(f"Chat template does not preserve the generation prefix at {location}")
+        inputs.update(process_sft_images(self.processor, images, image_kwargs, image_lengths))
         loss_mask = torch.zeros_like(input_ids)
         loss_mask[len(prefix_ids) :] = 1
         if not bool(loss_mask.any()):
             raise ValueError(f"The assistant target must contain at least one token at {location}")
+        labels = input_ids.masked_fill(~loss_mask.bool(), -100)
         inputs.pop("mm_token_type_ids", None)
         from verl.models.transformers.qwen3_vl import get_rope_index
 
@@ -241,13 +245,14 @@ class OfflineVideoQASFTDataset:
         )
         position_ids = torch.cat((torch.arange(len(input_ids)).unsqueeze(0), vision_positions), dim=0)
         result = dict(
-            input_ids=input_ids, position_ids=position_ids, loss_mask=loss_mask,
+            input_ids=input_ids, position_ids=position_ids, labels=labels, loss_mask=loss_mask,
             stream_state_mask=torch.zeros_like(input_ids), multi_modal_inputs=inputs,
         )
         if self.pad_mode == "right":
             padding = self.max_length - len(input_ids)
             result["input_ids"] = F.pad(input_ids, (0, padding), value=self.tokenizer.pad_token_id or 0)
             result["position_ids"] = F.pad(position_ids, (0, padding), value=0)
+            result["labels"] = F.pad(labels, (0, padding), value=-100)
             result["loss_mask"] = F.pad(loss_mask, (0, padding), value=0)
             result["stream_state_mask"] = F.pad(result["stream_state_mask"], (0, padding), value=0)
             result["attention_mask"] = F.pad(attention_mask, (0, padding), value=0)

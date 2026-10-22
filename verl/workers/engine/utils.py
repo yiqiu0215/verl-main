@@ -118,6 +118,9 @@ def prepare_micro_batches(
             min_num_micro_batch=min_num_micro_batch,
             use_dynamic_bsz_balance=use_dynamic_bsz_balance,
             force_group_size=force_group_size,
+            length_bucket=tu.get_non_tensor_data(data, "length_bucket_micro_batches", False),
+            max_padded_token_len=tu.get_non_tensor_data(data, "max_padded_token_len_per_gpu", None),
+            max_vision_patches=tu.get_non_tensor_data(data, "max_vision_patches_per_gpu", None),
         )
     else:
         total_data_size = len(data)

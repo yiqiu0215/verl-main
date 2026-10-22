@@ -354,6 +354,9 @@ def rearrange_micro_batches(
     min_num_micro_batch=None,
     use_dynamic_bsz_balance=True,
     force_group_size=1,
+    length_bucket=False,
+    max_padded_token_len=None,
+    max_vision_patches=None,
 ):
     """
     Split a batch into micro-batches by total token count, with optional DP sync and padding.
@@ -367,6 +370,9 @@ def rearrange_micro_batches(
         min_num_micro_batch (int, optional): force at least this many splits (pads empty ones).
         use_dynamic_bsz_balance (bool, optional): balance the computational workload between micro-batches
         force_group_size (int, optional): force consecutive samples to be in the same micro-batch (for RM training).
+        length_bucket (bool): group similar lengths while bounding dense padding and visual patches.
+        max_padded_token_len (int, optional): dense batch_size * max_seqlen limit for length buckets.
+        max_vision_patches (int, optional): unmerged visual patch limit for length buckets.
 
     Returns:
         List[TensorDict]: the micro-batches.
@@ -400,7 +406,7 @@ def rearrange_micro_batches(
         # used to support pp
         num_micro_batches = max(min_num_micro_batch, num_micro_batches)
     sync_micro_batch_count = dist.is_initialized() and same_micro_num_in_dp and dp_group is not None
-    if sync_micro_batch_count:
+    if sync_micro_batch_count and not length_bucket:
         num_micro_batches = torch.tensor([num_micro_batches], device=get_device_name())
         dist.all_reduce(num_micro_batches, op=dist.ReduceOp.MAX, group=dp_group)
         num_micro_batches = num_micro_batches.cpu().item()
@@ -424,13 +430,41 @@ def rearrange_micro_batches(
         group_token_lens = seq_len_effective.cpu().tolist()
 
     max_group_token_len = max(group_token_lens)
+    max_group_padded_len = max_group_vision_patches = 0
+    if length_bucket:
+        max_padded_token_len = max_token_len if max_padded_token_len is None else max_padded_token_len
+        if max_padded_token_len <= 0 or (max_vision_patches is not None and max_vision_patches <= 0):
+            raise ValueError("Padded token and visual patch budgets must be positive")
+        sample_token_lens = seq_len_effective.cpu().tolist()
+        group_max_lens = [
+            max(sample_token_lens[start : start + force_group_size])
+            for start in range(0, batch_size, force_group_size)
+        ]
+        sample_vision_patches = [0] * batch_size
+        if max_vision_patches is not None:
+            for index, inputs in enumerate(batch.get("multi_modal_inputs", [])):
+                inputs = inputs.data if hasattr(inputs, "data") else inputs
+                if inputs is not None:
+                    sample_vision_patches[index] = sum(
+                        int(inputs[key].prod(dim=-1).sum().item())
+                        for key in ("image_grid_thw", "video_grid_thw") if key in inputs
+                    )
+        group_vision_patches = [
+            sum(sample_vision_patches[start : start + force_group_size])
+            for start in range(0, batch_size, force_group_size)
+        ]
+        max_group_padded_len = max(group_max_lens) * force_group_size
+        max_group_vision_patches = max(group_vision_patches)
     min_num_groups = num_groups
     if sync_micro_batch_count:
         # Fatal constraints must be agreed on before any rank raises; otherwise peers can hang in the next collective.
-        constraints = torch.tensor([max_group_token_len, -num_groups], dtype=torch.long, device=get_device_name())
+        constraints = torch.tensor(
+            [max_group_token_len, max_group_padded_len, max_group_vision_patches, -num_groups],
+            dtype=torch.long, device=get_device_name(),
+        )
         dist.all_reduce(constraints, op=dist.ReduceOp.MAX, group=dp_group)
-        max_group_token_len = int(constraints[0].item())
-        min_num_groups = -int(constraints[1].item())
+        max_group_token_len, max_group_padded_len, max_group_vision_patches, negative_num_groups = constraints.tolist()
+        min_num_groups = -negative_num_groups
 
     if max_group_token_len > max_token_len:
         raise ValueError(
@@ -438,28 +472,71 @@ def rearrange_micro_batches(
             f"Got max_group_token_len={max_group_token_len} and max_token_len={max_token_len}."
         )
 
-    # ceildiv(total_seqlen, max_token_len) is only a lower bound because samples are indivisible.
-    # Increase the number of micro-batches until the balanced partition also respects the hard limit.
-    step = num_batches_divided_by or 1
-    while True:
-        if num_micro_batches > min_num_groups:
-            raise ValueError(
-                "Cannot satisfy max_token_len while keeping forced groups atomic and using the same "
-                "micro-batch count across DP ranks. "
-                f"Requested {num_micro_batches} non-empty micro-batches, but a rank has only "
-                f"{min_num_groups} forced groups."
-            )
-        micro_bsz_group_idx = get_seqlen_balanced_partitions(workloads, num_micro_batches, equal_size=False)
-        within_limit = all(
-            sum(group_token_lens[idx] for idx in partition) <= max_token_len for partition in micro_bsz_group_idx
-        )
+    if length_bucket:
+        if max_group_padded_len > max_padded_token_len:
+            raise ValueError(f"A forced group exceeds the padded token budget: {max_group_padded_len}")
+        if max_vision_patches is not None and max_group_vision_patches > max_vision_patches:
+            raise ValueError(f"A forced group exceeds the visual patch budget: {max_group_vision_patches}")
+        micro_bsz_group_idx = []
+        partition = []
+        token_count = vision_patches = max_length = 0
+        for index in sorted(range(num_groups), key=lambda i: (-group_max_lens[i], -group_vision_patches[i], i)):
+            next_max_length = max(max_length, group_max_lens[index])
+            padded_tokens = (len(partition) + 1) * force_group_size * next_max_length
+            if partition and (
+                group_max_lens[index].bit_length() != max_length.bit_length()
+                or token_count + group_token_lens[index] > max_token_len
+                or padded_tokens > max_padded_token_len
+                or (
+                    max_vision_patches is not None
+                    and vision_patches + group_vision_patches[index] > max_vision_patches
+                )
+            ):
+                micro_bsz_group_idx.append(partition)
+                partition = []
+                token_count = vision_patches = max_length = 0
+            partition.append(index)
+            token_count += group_token_lens[index]
+            vision_patches += group_vision_patches[index]
+            max_length = max(max_length, group_max_lens[index])
+        micro_bsz_group_idx.append(partition)
+        num_micro_batches = max(num_micro_batches, len(micro_bsz_group_idx))
         if sync_micro_batch_count:
-            within_limit_tensor = torch.tensor([int(within_limit)], device=get_device_name())
-            dist.all_reduce(within_limit_tensor, op=dist.ReduceOp.MIN, group=dp_group)
-            within_limit = bool(within_limit_tensor.item())
-        if within_limit:
-            break
-        num_micro_batches += step
+            count = torch.tensor([num_micro_batches], device=get_device_name())
+            dist.all_reduce(count, op=dist.ReduceOp.MAX, group=dp_group)
+            num_micro_batches = int(count.item())
+        if num_batches_divided_by is not None:
+            num_micro_batches = roundup_divisible(num_micro_batches, num_batches_divided_by)
+        if num_micro_batches > min_num_groups:
+            raise ValueError("Cannot create the same number of nonempty length buckets across DP ranks")
+        while len(micro_bsz_group_idx) < num_micro_batches:
+            index = max(range(len(micro_bsz_group_idx)), key=lambda i: len(micro_bsz_group_idx[i]))
+            partition = micro_bsz_group_idx[index]
+            midpoint = len(partition) // 2
+            micro_bsz_group_idx[index : index + 1] = [partition[:midpoint], partition[midpoint:]]
+    else:
+        # ceildiv(total_seqlen, max_token_len) is only a lower bound because samples are indivisible.
+        # Increase the number of micro-batches until the balanced partition also respects the hard limit.
+        step = num_batches_divided_by or 1
+        while True:
+            if num_micro_batches > min_num_groups:
+                raise ValueError(
+                    "Cannot satisfy max_token_len while keeping forced groups atomic and using the same "
+                    "micro-batch count across DP ranks. "
+                    f"Requested {num_micro_batches} non-empty micro-batches, but a rank has only "
+                    f"{min_num_groups} forced groups."
+                )
+            micro_bsz_group_idx = get_seqlen_balanced_partitions(workloads, num_micro_batches, equal_size=False)
+            within_limit = all(
+                sum(group_token_lens[idx] for idx in partition) <= max_token_len for partition in micro_bsz_group_idx
+            )
+            if sync_micro_batch_count:
+                within_limit_tensor = torch.tensor([int(within_limit)], device=get_device_name())
+                dist.all_reduce(within_limit_tensor, op=dist.ReduceOp.MIN, group=dp_group)
+                within_limit = bool(within_limit_tensor.item())
+            if within_limit:
+                break
+            num_micro_batches += step
 
     if force_group_size > 1:
         # Convert group indices back to sample indices.
