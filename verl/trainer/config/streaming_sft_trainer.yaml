@@ -1,0 +1,116 @@
+defaults:
+  - sft_trainer_engine
+  - _self_
+
+data:
+  dataset_config: examples/streaming_video_sft/datasets.yaml
+  train_files: ${data.dataset_config}
+  val_files: null
+  train_batch_size: 128
+  micro_batch_size_per_gpu: 1
+  use_dynamic_bsz: true
+  max_token_len_per_gpu: 32768
+  max_length: 32768
+  video_max_frames: 256
+  frame_min_pixels: 784
+  frame_max_pixels: 200704
+  truncation: error
+  pad_mode: no_padding
+  num_workers: 4
+  custom_cls:
+    path: pkg://verl.utils.dataset.mixed_video_sft
+    name: MixedVideoSFTDataset
+  streaming_video:
+    annotations: /workspace/s/lzw/datasets/Stream-VideoLLM/TrainingData/annotations_curated
+    fps: 4.0
+    round_seconds: 1.0
+    window_rounds: 64
+    video_max_frames: ${data.video_max_frames}
+    video_root: /workspace/s/lzw/datasets/Stream-VideoLLM/TrainingData
+    missing_video: skip
+    path_map: null
+    path_replacements: {}
+    cache_sessions: 8
+    cache_frames: 64
+    end_tolerance: null
+    sequence_filename_pattern: null
+    system_prompt: null
+    frame_min_pixels: ${data.frame_min_pixels}
+    frame_max_pixels: ${data.frame_max_pixels}
+  offline_video_qa:
+    fps: 1.0
+    video_max_frames: ${data.video_max_frames}
+    missing_video: skip
+    prepend_data_source: false
+    path_map: null
+    path_replacements: {}
+    system_prompt: null
+    frame_min_pixels: ${data.frame_min_pixels}
+    frame_max_pixels: ${data.frame_max_pixels}
+  videochat3:
+    annotation_root: /workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations
+    video_root: /workspace/s/lzw/datasets/VideoChat3/media
+    fps: 2.0
+    video_max_frames: ${data.video_max_frames}
+    missing_media: skip
+    cache_sessions: 8
+    cache_archives: 2
+    system_prompt: null
+    frame_min_pixels: ${data.frame_min_pixels}
+    frame_max_pixels: ${data.frame_max_pixels}
+    min_pixels: 4096
+    max_pixels: 147456
+
+model:
+  path: /workspace/s/lzw/hf/hub/models--Qwen--Qwen3-VL-2B-Instruct/snapshots/89644892e4d85e24eaac8bacfd4f463576704203
+  additional_special_tokens:
+    - '</Silence>'
+    - '</Response>'
+  use_remove_padding: false
+  use_liger: true
+  use_fused_kernels: true
+  fused_kernel_options:
+    impl_backend: triton
+  enable_gradient_checkpointing: true
+  lora_rank: 0
+  override_config:
+    attn_implementation: flash_attention_2
+
+engine:
+  strategy: fsdp2
+  use_fused_kernels: ${model.use_fused_kernels}
+  ulysses_sequence_parallel_size: 1
+  use_torch_compile: false
+  dtype: bfloat16
+  reshard_after_forward: false
+  use_no_sync_for_gradient_accumulation: true
+
+optim:
+  lr: 1.0e-5
+  lr_warmup_steps: 200
+  lr_warmup_steps_ratio: 0.0
+  lr_scheduler_type: cosine
+  clip_grad: 1.0
+
+streaming_loss:
+  gamma: 2.0
+  auto_alpha: true
+
+checkpoint:
+  save_contents: [model, optimizer, extra, hf_model]
+  load_contents: [model, optimizer, extra]
+
+trainer:
+  project_name: streaming-video-sft
+  experiment_name: qwen3-vl-2b-streaming-baseline
+  default_local_dir: /workspace/s/lzw/output/StreamMLLM
+  total_epochs: 1
+  logger: [console, tensorboard]
+  save_freq: 500
+  test_freq: -1
+  max_ckpt_to_keep: 1
+  resume_mode: disable
+
+hydra:
+  job:
+    chdir: false

@@ -1,0 +1,850 @@
+{
+  "source_url": "https://huggingface.co/datasets/lmwang/VideoChat3-Stage3-Training-Data/resolve/main/VideoChat3_Stage3_Training_Data.json",
+  "source_sha256": "31e5937481c11cb97be2085cf616f5d3a00a129b48113ffda1a12a6ac7b44753",
+  "sources": {
+    "image/beedata_annos_newest_no_think_caption_part/Caption_COYO-Recaption_train_1091735_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/COYO-Recaption",
+      "media_subdir": "image/Caption/COYO-Recaption"
+    },
+    "image/beedata_annos_newest_no_think_caption_part/Caption_PixMo-Cap_train_706911_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/PixMo-Cap",
+      "media_subdir": "image/Caption/PixMo-Cap"
+    },
+    "image/beedata_annos_newest_no_think_caption_part/Caption_ST-VQA_train_13581_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/ST-VQA",
+      "media_subdir": "image/Caption/ST-VQA"
+    },
+    "image/beedata_annos_newest_no_think_caption_part/Caption_Sherlock_train_16936_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/Sherlock",
+      "media_subdir": "image/Caption/Sherlock"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part00_train_21000_20806_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part00",
+      "media_subdir": "image/Caption/WIT_Part00"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part01_train_21000_20802_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part01",
+      "media_subdir": "image/Caption/WIT_Part01"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part02_train_21000_20829_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part02",
+      "media_subdir": "image/Caption/WIT_Part02"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part03_train_21000_20847_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part03",
+      "media_subdir": "image/Caption/WIT_Part03"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part04_train_21000_20856_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part04",
+      "media_subdir": "image/Caption/WIT_Part04"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part05_train_21000_20864_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part05",
+      "media_subdir": "image/Caption/WIT_Part05"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part06_train_21000_20841_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part06",
+      "media_subdir": "image/Caption/WIT_Part06"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part07_train_21000_20805_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part07",
+      "media_subdir": "image/Caption/WIT_Part07"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part08_train_21000_20837_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part08",
+      "media_subdir": "image/Caption/WIT_Part08"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part09_train_21000_20853_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part09",
+      "media_subdir": "image/Caption/WIT_Part09"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part10_train_21000_20846_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part10",
+      "media_subdir": "image/Caption/WIT_Part10"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part11_train_21000_20846_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part11",
+      "media_subdir": "image/Caption/WIT_Part11"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part12_train_21000_20835_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part12",
+      "media_subdir": "image/Caption/WIT_Part12"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part13_train_21000_20827_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part13",
+      "media_subdir": "image/Caption/WIT_Part13"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part14_train_21000_20825_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part14",
+      "media_subdir": "image/Caption/WIT_Part14"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part15_train_21000_20843_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part15",
+      "media_subdir": "image/Caption/WIT_Part15"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part16_train_21000_20840_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part16",
+      "media_subdir": "image/Caption/WIT_Part16"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part17_train_21000_20852_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part17",
+      "media_subdir": "image/Caption/WIT_Part17"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part18_train_21000_20817_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part18",
+      "media_subdir": "image/Caption/WIT_Part18"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part19_train_20898_20742_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/WIT_Part19",
+      "media_subdir": "image/Caption/WIT_Part19"
+    },
+    "image/beedata_annos_newest_no_think_norepeat/Caption_other_Caption_train_1068_1064_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Caption/other",
+      "media_subdir": "image/Caption/other"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_ArxivQA_train_287009_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/ArxivQA",
+      "media_subdir": "image/remake/Chart/ArxivQA"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_Chart2Text_train_34525_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/Chart2Text",
+      "media_subdir": "image/remake/Chart/Chart2Text"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_ChartQA_train_34680_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/ChartQA",
+      "media_subdir": "image/remake/Chart/ChartQA"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_CoSyn_Chart_train_308225_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/CoSyn_Chart",
+      "media_subdir": "image/remake/Chart/CoSyn_Chart"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_CoSyn_Diagram_train_77143_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/CoSyn_Diagram",
+      "media_subdir": "image/remake/Chart/CoSyn_Diagram"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_CoSyn_Graphic_train_19378_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/CoSyn_Graphic",
+      "media_subdir": "image/remake/Chart/CoSyn_Graphic"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_CoSyn_Table_train_86475_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/CoSyn_Table",
+      "media_subdir": "image/remake/Chart/CoSyn_Table"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_DVQA_train_474688_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/DVQA",
+      "media_subdir": "image/remake/Chart/DVQA"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_FigureQA_train_206844_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/FigureQA",
+      "media_subdir": "image/remake/Chart/FigureQA"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_HiTab_train_3609_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/HiTab",
+      "media_subdir": "image/remake/Chart/HiTab"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_Infographic_train_2763_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/Infographic",
+      "media_subdir": "image/remake/Chart/Infographic"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_LRV_Chart_train_3568_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/LRV_Chart",
+      "media_subdir": "image/remake/Chart/LRV_Chart"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_MAVIS_Function_train_25321_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/MAVIS_Function",
+      "media_subdir": "image/remake/Chart/MAVIS_Function"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_MMC_Instruction_train_27094_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/MMC_Instruction",
+      "media_subdir": "image/remake/Chart/MMC_Instruction"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_MMTab_train_165603_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/MMTab",
+      "media_subdir": "image/remake/Chart/MMTab"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_MultiHiertt_train_4588_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/MultiHiertt",
+      "media_subdir": "image/remake/Chart/MultiHiertt"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_PlotQA_train_138932_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/PlotQA",
+      "media_subdir": "image/remake/Chart/PlotQA"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_RobuT_SQA_train_22281_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/RobuT_SQA",
+      "media_subdir": "image/remake/Chart/RobuT_SQA"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_RobuT_WTQ_train_44181_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/RobuT_WTQ",
+      "media_subdir": "image/remake/Chart/RobuT_WTQ"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_RobuT_WikiSQL_train_110868_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/RobuT_WikiSQL",
+      "media_subdir": "image/remake/Chart/RobuT_WikiSQL"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_SciTSR_train_8981_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/SciTSR",
+      "media_subdir": "image/remake/Chart/SciTSR"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_SimChart9K_train_4453_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/SimChart9K",
+      "media_subdir": "image/remake/Chart/SimChart9K"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_TabMWP_train_46321_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/TabMWP",
+      "media_subdir": "image/remake/Chart/TabMWP"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_TinyChart_train_1014067_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/TinyChart",
+      "media_subdir": "image/remake/Chart/TinyChart"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_UReader_KG_train_39038_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/UReader_KG",
+      "media_subdir": "image/remake/Chart/UReader_KG"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_UReader_QA_train_121365_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/UReader_QA",
+      "media_subdir": "image/remake/Chart/UReader_QA"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_UniChart_train_330018_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/UniChart",
+      "media_subdir": "image/remake/Chart/UniChart"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_VisText_train_15616_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/VisText",
+      "media_subdir": "image/remake/Chart/VisText"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Chart_other_Chart_train_1982_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Chart/other_Chart",
+      "media_subdir": "image/remake/Chart/other_Chart"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Document_CoSyn_document_train_101510_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Document/CoSyn_document",
+      "media_subdir": "image/remake/Document/CoSyn_document"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Document_CoSyn_nutrition_train_12954_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Document/CoSyn_nutrition",
+      "media_subdir": "image/remake/Document/CoSyn_nutrition"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Document_DocReason_train_3983_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Document/DocReason",
+      "media_subdir": "image/remake/Document/DocReason"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Document_DocVQA_train_25911_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Document/DocVQA",
+      "media_subdir": "image/remake/Document/DocVQA"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Document_Docmatix_train_19077_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Document/Docmatix",
+      "media_subdir": "image/remake/Document/Docmatix"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Document_EATEN_train_30000_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Document/EATEN",
+      "media_subdir": "image/remake/Document/EATEN"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Document_FinTabNet_train_50105_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Document/FinTabNet",
+      "media_subdir": "image/remake/Document/FinTabNet"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Document_InfoVQA_train_10125_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Document/InfoVQA",
+      "media_subdir": "image/remake/Document/InfoVQA"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Document_InfographicVQA_train_5521_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Document/InfographicVQA",
+      "media_subdir": "image/remake/Document/InfographicVQA"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Document_LLaVAR_GPT4_train_23267_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Document/LLaVAR_GPT4",
+      "media_subdir": "image/remake/Document/LLaVAR_GPT4"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Document_OCR-VQA_train_108933_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Document/OCR-VQA",
+      "media_subdir": "image/remake/Document/OCR-VQA"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Document_POIE_train_2250_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Document/POIE",
+      "media_subdir": "image/remake/Document/POIE"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Document_ScreenQA_train_64870_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Document/ScreenQA",
+      "media_subdir": "image/remake/Document/ScreenQA"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Document_TextVQA_train_39795_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Document/TextVQA",
+      "media_subdir": "image/remake/Document/TextVQA"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Document_UreaderOCR_train_5524_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Document/UreaderOCR",
+      "media_subdir": "image/remake/Document/UreaderOCR"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Document_Ureader_Chart_train_349915_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Document/Ureader_Chart",
+      "media_subdir": "image/remake/Document/Ureader_Chart"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Document_VisualMRC_train_3292_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Document/VisualMRC",
+      "media_subdir": "image/remake/Document/VisualMRC"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Document_other_Document_train_195_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Document/other_Document",
+      "media_subdir": "image/remake/Document/other_Document"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Grounding-and-Counting_CLEVR-Change_train_2988_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Grounding-and-Counting/CLEVR-Change",
+      "media_subdir": "image/remake/Grounding-and-Counting/CLEVR-Change"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Grounding-and-Counting_CLEVR_Math_train_7179_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Grounding-and-Counting/CLEVR_Math",
+      "media_subdir": "image/remake/Grounding-and-Counting/CLEVR_Math"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Grounding-and-Counting_CLEVR_train_498929_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Grounding-and-Counting/CLEVR",
+      "media_subdir": "image/remake/Grounding-and-Counting/CLEVR"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Grounding-and-Counting_MathV360K_VQA-AS_train_4054_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Grounding-and-Counting/MathV360K_VQA-AS",
+      "media_subdir": "image/remake/Grounding-and-Counting/MathV360K_VQA-AS"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Grounding-and-Counting_MovieNet_train_7379_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Grounding-and-Counting/MovieNet",
+      "media_subdir": "image/remake/Grounding-and-Counting/MovieNet"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Grounding-and-Counting_Super-CLEVR_train_6811_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Grounding-and-Counting/Super-CLEVR",
+      "media_subdir": "image/remake/Grounding-and-Counting/Super-CLEVR"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Grounding-and-Counting_TallyQA_train_91587_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Grounding-and-Counting/TallyQA",
+      "media_subdir": "image/remake/Grounding-and-Counting/TallyQA"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Grounding-and-Counting_VisualGenome_train_77404_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Grounding-and-Counting/VisualGenome",
+      "media_subdir": "image/remake/Grounding-and-Counting/VisualGenome"
+    },
+    "image/beedata_annos_remake_20260111_no_think/Grounding-and-Counting_other_Grounding-and-Counting_train_1146_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/Grounding-and-Counting/other_Grounding-and-Counting",
+      "media_subdir": "image/remake/Grounding-and-Counting/other_Grounding-and-Counting"
+    },
+    "image/beedata_annos_remake_20260111_no_think/OCR_ArXiv_OCR_train_159300_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/OCR/ArXiv_OCR",
+      "media_subdir": "image/remake/OCR/ArXiv_OCR"
+    },
+    "image/beedata_annos_remake_20260111_no_think/OCR_CTW_train_13577_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/OCR/CTW",
+      "media_subdir": "image/remake/OCR/CTW"
+    },
+    "image/beedata_annos_remake_20260111_no_think/OCR_Chrome-Writing_train_9247_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/OCR/Chrome-Writing",
+      "media_subdir": "image/remake/OCR/Chrome-Writing"
+    },
+    "image/beedata_annos_remake_20260111_no_think/OCR_HME_train_93641_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/OCR/HME",
+      "media_subdir": "image/remake/OCR/HME"
+    },
+    "image/beedata_annos_remake_20260111_no_think/OCR_IAM_train_5659_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/OCR/IAM",
+      "media_subdir": "image/remake/OCR/IAM"
+    },
+    "image/beedata_annos_remake_20260111_no_think/OCR_ICDAR-LSVT-zh_train_28213_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/OCR/ICDAR-LSVT-zh",
+      "media_subdir": "image/remake/OCR/ICDAR-LSVT-zh"
+    },
+    "image/beedata_annos_remake_20260111_no_think/OCR_ICDAR2017_train_9900_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/OCR/ICDAR2017",
+      "media_subdir": "image/remake/OCR/ICDAR2017"
+    },
+    "image/beedata_annos_remake_20260111_no_think/OCR_ICDAR2019_train_3392_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/OCR/ICDAR2019",
+      "media_subdir": "image/remake/OCR/ICDAR2019"
+    },
+    "image/beedata_annos_remake_20260111_no_think/OCR_IIIT_5K_train_1976_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/OCR/IIIT_5K",
+      "media_subdir": "image/remake/OCR/IIIT_5K"
+    },
+    "image/beedata_annos_remake_20260111_no_think/OCR_K12_Printing_train_211104_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/OCR/K12_Printing",
+      "media_subdir": "image/remake/OCR/K12_Printing"
+    },
+    "image/beedata_annos_remake_20260111_no_think/OCR_MTWI_zh_train_8330_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/OCR/MTWI_zh",
+      "media_subdir": "image/remake/OCR/MTWI_zh"
+    },
+    "image/beedata_annos_remake_20260111_no_think/OCR_Orand-Car-A_train_2000_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/OCR/Orand-Car-A",
+      "media_subdir": "image/remake/OCR/Orand-Car-A"
+    },
+    "image/beedata_annos_remake_20260111_no_think/OCR_ReCTs_train_17000_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/OCR/ReCTs",
+      "media_subdir": "image/remake/OCR/ReCTs"
+    },
+    "image/beedata_annos_remake_20260111_no_think/OCR_Rendered_Text_train_9996_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/OCR/Rendered_Text",
+      "media_subdir": "image/remake/OCR/Rendered_Text"
+    },
+    "image/beedata_annos_remake_20260111_no_think/OCR_Sroie_train_31832_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/OCR/Sroie",
+      "media_subdir": "image/remake/OCR/Sroie"
+    },
+    "image/beedata_annos_remake_20260111_no_think/OCR_TextOCR_train_47656_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/OCR/TextOCR",
+      "media_subdir": "image/remake/OCR/TextOCR"
+    },
+    "image/beedata_annos_remake_20260111_no_think/OCR_VCR-Wiki_train_77935_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/OCR/VCR-Wiki",
+      "media_subdir": "image/remake/OCR/VCR-Wiki"
+    },
+    "image/beedata_annos_remake_general_no_think/General_A-OKVQA_train_27504_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/A-OKVQA",
+      "media_subdir": "image/remake/General/A-OKVQA"
+    },
+    "image/beedata_annos_remake_general_no_think/General_ALFWorld_train_31893_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/ALFWorld",
+      "media_subdir": "image/remake/General/ALFWorld"
+    },
+    "image/beedata_annos_remake_general_no_think/General_ALLaVA_train_720794_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/ALLaVA",
+      "media_subdir": "image/remake/General/ALLaVA"
+    },
+    "image/beedata_annos_remake_general_no_think/General_ART500K_train_11045_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/ART500K",
+      "media_subdir": "image/remake/General/ART500K"
+    },
+    "image/beedata_annos_remake_general_no_think/General_Birds-to-Words_train_11169_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/Birds-to-Words",
+      "media_subdir": "image/remake/General/Birds-to-Words"
+    },
+    "image/beedata_annos_remake_general_no_think/General_COCO_train_16332_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/COCO",
+      "media_subdir": "image/remake/General/COCO"
+    },
+    "image/beedata_annos_remake_general_no_think/General_Cambrian_Filter_train_93493_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/Cambrian_Filter",
+      "media_subdir": "image/remake/General/Cambrian_Filter"
+    },
+    "image/beedata_annos_remake_general_no_think/General_Cambrian_train_5950_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/Cambrian",
+      "media_subdir": "image/remake/General/Cambrian"
+    },
+    "image/beedata_annos_remake_general_no_think/General_Cauldron_mulberry_train_28068_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/Cauldron_mulberry",
+      "media_subdir": "image/remake/General/Cauldron_mulberry"
+    },
+    "image/beedata_annos_remake_general_no_think/General_Co-Instruct_train_30507_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/Co-Instruct",
+      "media_subdir": "image/remake/General/Co-Instruct"
+    },
+    "image/beedata_annos_remake_general_no_think/General_ContrastiveCaption_train_17211_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/ContrastiveCaption",
+      "media_subdir": "image/remake/General/ContrastiveCaption"
+    },
+    "image/beedata_annos_remake_general_no_think/General_DreamSim_train_11035_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/DreamSim",
+      "media_subdir": "image/remake/General/DreamSim"
+    },
+    "image/beedata_annos_remake_general_no_think/General_EST-VQA_train_13543_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/EST-VQA",
+      "media_subdir": "image/remake/General/EST-VQA"
+    },
+    "image/beedata_annos_remake_general_no_think/General_FlintstonesSV_train_17035_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/FlintstonesSV",
+      "media_subdir": "image/remake/General/FlintstonesSV"
+    },
+    "image/beedata_annos_remake_general_no_think/General_GQA_train_46172_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/GQA",
+      "media_subdir": "image/remake/General/GQA"
+    },
+    "image/beedata_annos_remake_general_no_think/General_HQ-Edit_train_36427_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/HQ-Edit",
+      "media_subdir": "image/remake/General/HQ-Edit"
+    },
+    "image/beedata_annos_remake_general_no_think/General_Hateful_Memes_train_7321_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/Hateful_Memes",
+      "media_subdir": "image/remake/General/Hateful_Memes"
+    },
+    "image/beedata_annos_remake_general_no_think/General_IDK_train_16580_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/IDK",
+      "media_subdir": "image/remake/General/IDK"
+    },
+    "image/beedata_annos_remake_general_no_think/General_IconQA_train_35911_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/IconQA",
+      "media_subdir": "image/remake/General/IconQA"
+    },
+    "image/beedata_annos_remake_general_no_think/General_InternVL-SA-1B-Caption_train_16922_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/InternVL-SA-1B-Caption",
+      "media_subdir": "image/remake/General/InternVL-SA-1B-Caption"
+    },
+    "image/beedata_annos_remake_general_no_think/General_KVQA_train_17634_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/KVQA",
+      "media_subdir": "image/remake/General/KVQA"
+    },
+    "image/beedata_annos_remake_general_no_think/General_KonIQ-10k_train_9361_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/KonIQ-10k",
+      "media_subdir": "image/remake/General/KonIQ-10k"
+    },
+    "image/beedata_annos_remake_general_no_think/General_LLaVA-Instruct-300k_train_470800_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/LLaVA-Instruct-300k",
+      "media_subdir": "image/remake/General/LLaVA-Instruct-300k"
+    },
+    "image/beedata_annos_remake_general_no_think/General_LLaVA-NeXT-Data_train_711541_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/LLaVA-NeXT-Data",
+      "media_subdir": "image/remake/General/LLaVA-NeXT-Data"
+    },
+    "image/beedata_annos_remake_general_no_think/General_LRV_Normal_train_39491_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/LRV_Normal",
+      "media_subdir": "image/remake/General/LRV_Normal"
+    },
+    "image/beedata_annos_remake_general_no_think/General_LVIS-InstructV4_train_145372_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/LVIS-InstructV4",
+      "media_subdir": "image/remake/General/LVIS-InstructV4"
+    },
+    "image/beedata_annos_remake_general_no_think/General_MMChat-Twitter-Post_train_4317_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/MMChat-Twitter-Post",
+      "media_subdir": "image/remake/General/MMChat-Twitter-Post"
+    },
+    "image/beedata_annos_remake_general_no_think/General_MagicBrush_train_9793_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/MagicBrush",
+      "media_subdir": "image/remake/General/MagicBrush"
+    },
+    "image/beedata_annos_remake_general_no_think/General_NLVR2_train_54097_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/NLVR2",
+      "media_subdir": "image/remake/General/NLVR2"
+    },
+    "image/beedata_annos_remake_general_no_think/General_NewYorker_Caption_train_2554_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/NewYorker_Caption",
+      "media_subdir": "image/remake/General/NewYorker_Caption"
+    },
+    "image/beedata_annos_remake_general_no_think/General_NextQA_train_3092_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/NextQA",
+      "media_subdir": "image/remake/General/NextQA"
+    },
+    "image/beedata_annos_remake_general_no_think/General_Objects365_train_5192_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/Objects365",
+      "media_subdir": "image/remake/General/Objects365"
+    },
+    "image/beedata_annos_remake_general_no_think/General_PixMo-AskModelAnything_train_96280_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/PixMo-AskModelAnything",
+      "media_subdir": "image/remake/General/PixMo-AskModelAnything"
+    },
+    "image/beedata_annos_remake_general_no_think/General_PixMo-CapQA_train_237263_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/PixMo-CapQA",
+      "media_subdir": "image/remake/General/PixMo-CapQA"
+    },
+    "image/beedata_annos_remake_general_no_think/General_PixMo-Points-Explanations_train_44908_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/PixMo-Points-Explanations",
+      "media_subdir": "image/remake/General/PixMo-Points-Explanations"
+    },
+    "image/beedata_annos_remake_general_no_think/General_SVIT-core-150K_train_269361_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/SVIT-core-150K",
+      "media_subdir": "image/remake/General/SVIT-core-150K"
+    },
+    "image/beedata_annos_remake_general_no_think/General_ScanQA_train_10188_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/ScanQA",
+      "media_subdir": "image/remake/General/ScanQA"
+    },
+    "image/beedata_annos_remake_general_no_think/General_ShareGPT4V_Knowledge_train_1983_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/ShareGPT4V_Knowledge",
+      "media_subdir": "image/remake/General/ShareGPT4V_Knowledge"
+    },
+    "image/beedata_annos_remake_general_no_think/General_ShareGPT4V_SAM_train_122461_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/ShareGPT4V_SAM",
+      "media_subdir": "image/remake/General/ShareGPT4V_SAM"
+    },
+    "image/beedata_annos_remake_general_no_think/General_ShareGPT4o_train_73884_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/ShareGPT4o",
+      "media_subdir": "image/remake/General/ShareGPT4o"
+    },
+    "image/beedata_annos_remake_general_no_think/General_TQA_train_26821_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/TQA",
+      "media_subdir": "image/remake/General/TQA"
+    },
+    "image/beedata_annos_remake_general_no_think/General_VIST_train_21144_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/VIST",
+      "media_subdir": "image/remake/General/VIST"
+    },
+    "image/beedata_annos_remake_general_no_think/General_VSR_train_2752_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/VSR",
+      "media_subdir": "image/remake/General/VSR"
+    },
+    "image/beedata_annos_remake_general_no_think/General_ViQuAE_train_2304_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/ViQuAE",
+      "media_subdir": "image/remake/General/ViQuAE"
+    },
+    "image/beedata_annos_remake_general_no_think/General_Vision_FLAN_train_458760_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/Vision_FLAN",
+      "media_subdir": "image/remake/General/Vision_FLAN"
+    },
+    "image/beedata_annos_remake_general_no_think/General_Visual7W_train_29965_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/Visual7W",
+      "media_subdir": "image/remake/General/Visual7W"
+    },
+    "image/beedata_annos_remake_general_no_think/General_WebQA_train_6588_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/WebQA",
+      "media_subdir": "image/remake/General/WebQA"
+    },
+    "image/beedata_annos_remake_general_no_think/General_idefics375k_train_404454_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/idefics375k",
+      "media_subdir": "image/remake/General/idefics375k"
+    },
+    "image/beedata_annos_remake_general_no_think/General_nuScenes_train_6510_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/nuScenes",
+      "media_subdir": "image/remake/General/nuScenes"
+    },
+    "image/beedata_annos_remake_general_no_think/General_other_General_train_3061_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/remake/General/other_General",
+      "media_subdir": "image/remake/General/other_General"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_AI2D_GPT4V_train_0-0_merged_5507_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/AI2D_GPT4V",
+      "media_subdir": "image/STEM/AI2D_GPT4V"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_AI2D_InternVL_train_0-1_merged_10633_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/AI2D_InternVL",
+      "media_subdir": "image/STEM/AI2D_InternVL"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_AI2D_train_0-2_merged_28597_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/AI2D",
+      "media_subdir": "image/STEM/AI2D"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_CMM-Math_train_0-0_merged_1485_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/CMM-Math",
+      "media_subdir": "image/STEM/CMM-Math"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_CoSyn_Chemical_train_0-1_merged_18222_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/CoSyn_Chemical",
+      "media_subdir": "image/STEM/CoSyn_Chemical"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_CoSyn_Circuit_train_0-1_merged_16962_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/CoSyn_Circuit",
+      "media_subdir": "image/STEM/CoSyn_Circuit"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_CoSyn_Math_train_0-3_merged_37427_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/CoSyn_Math",
+      "media_subdir": "image/STEM/CoSyn_Math"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_CoSyn_Music_train_0-2_merged_21158_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/CoSyn_Music",
+      "media_subdir": "image/STEM/CoSyn_Music"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_Geo170K_train_0-10_merged_106594_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/Geo170K",
+      "media_subdir": "image/STEM/Geo170K"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_GeoQA+_train_0-6_merged_60261_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/GeoQA+",
+      "media_subdir": "image/STEM/GeoQA+"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_GeomVerse_train_0-0_merged_6531_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/GeomVerse",
+      "media_subdir": "image/STEM/GeomVerse"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_Geometry3K_train_0-1_merged_11355_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/Geometry3K",
+      "media_subdir": "image/STEM/Geometry3K"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_InterGPS_train_0-0_merged_1326_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/InterGPS",
+      "media_subdir": "image/STEM/InterGPS"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_MAVIS-Geo_train_0-4_merged_43933_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/MAVIS-Geo",
+      "media_subdir": "image/STEM/MAVIS-Geo"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_MAVIS-Metagen_train_0-6_merged_62497_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/MAVIS-Metagen",
+      "media_subdir": "image/STEM/MAVIS-Metagen"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_MapQA_train_0-14_merged_142630_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/MapQA",
+      "media_subdir": "image/STEM/MapQA"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_MathV360K_TQA_train_0-0_merged_8437_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/MathV360K_TQA",
+      "media_subdir": "image/STEM/MathV360K_TQA"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_MetaMathQA_train_0-10_merged_110000_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/MetaMathQA",
+      "media_subdir": "image/STEM/MetaMathQA"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_PMC-VQA_train_0-2_merged_25959_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/PMC-VQA",
+      "media_subdir": "image/STEM/PMC-VQA"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_PathVQA_train_0-2_merged_21776_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/PathVQA",
+      "media_subdir": "image/STEM/PathVQA"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_RAVEN_train_0-2_merged_23123_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/RAVEN",
+      "media_subdir": "image/STEM/RAVEN"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_ScienceQA_train_0-1_merged_12633_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/ScienceQA",
+      "media_subdir": "image/STEM/ScienceQA"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_UniGeo_train_0-0_merged_8431_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/UniGeo",
+      "media_subdir": "image/STEM/UniGeo"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_VQA-RAD_train_0-0_merged_1561_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/VQA-RAD",
+      "media_subdir": "image/STEM/VQA-RAD"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_VisualWebInstruct_filtered_train_0-19_merged_190450_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/VisualWebInstruct_filtered",
+      "media_subdir": "image/STEM/VisualWebInstruct_filtered"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_VisualWebInstruct_train_0-14_merged_143407_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/VisualWebInstruct",
+      "media_subdir": "image/STEM/VisualWebInstruct"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_VizWiz_train_0-0_merged_6054_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/VizWiz",
+      "media_subdir": "image/STEM/VizWiz"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_WebSight_train_0-0_merged_7634_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/WebSight",
+      "media_subdir": "image/STEM/WebSight"
+    },
+    "image/honey_meta_merged_no_think_stem_norepeat/STEM_other_train_0-0_merged_3864_sr0.05.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/STEM/other",
+      "media_subdir": "image/STEM/other"
+    },
+    "motion-videos/01_atomic_motion/sft_sr0.1.jsonl": {
+      "media_root": "videochat3_data_annotations/motion-videos/01_atomic_motion/videos/",
+      "media_subdir": "motion-videos"
+    },
+    "motion-videos/01_atomic_motion/sft_sr0.5.jsonl": {
+      "media_root": "videochat3_data_annotations/motion-videos/01_atomic_motion/videos/",
+      "media_subdir": "motion-videos"
+    },
+    "motion-videos/01_atomic_motion/sft_sr1.jsonl": {
+      "media_root": "videochat3_data_annotations/motion-videos/01_atomic_motion/videos/",
+      "media_subdir": "motion-videos"
+    },
+    "motion-videos/02_atomic2_extended_motion/sft_sr0.1.jsonl": {
+      "media_root": "videochat3_data_annotations/motion-videos/02_atomic2_extended_motion/videos/",
+      "media_subdir": "motion-videos"
+    },
+    "motion-videos/02_atomic2_extended_motion/sft_sr0.5.jsonl": {
+      "media_root": "videochat3_data_annotations/motion-videos/02_atomic2_extended_motion/videos/",
+      "media_subdir": "motion-videos"
+    },
+    "motion-videos/02_atomic2_extended_motion/sft_sr1.jsonl": {
+      "media_root": "videochat3_data_annotations/motion-videos/02_atomic2_extended_motion/videos/",
+      "media_subdir": "motion-videos"
+    },
+    "motion-videos/Atomic2_OpenQA/sft_sr0.1.jsonl": {
+      "media_root": "videochat3_data_annotations/motion-videos/Atomic2_OpenQA/videos/",
+      "media_subdir": "motion-videos"
+    },
+    "motion-videos/Atomic2_OpenQA/sft_sr0.5.jsonl": {
+      "media_root": "videochat3_data_annotations/motion-videos/Atomic2_OpenQA/videos/",
+      "media_subdir": "motion-videos"
+    },
+    "motion-videos/Atomic2_OpenQA/sft_sr1.jsonl": {
+      "media_root": "videochat3_data_annotations/motion-videos/Atomic2_OpenQA/videos/",
+      "media_subdir": "motion-videos"
+    },
+    "motion-videos/Atomic_OpenQA/sft_sr0.1.jsonl": {
+      "media_root": "videochat3_data_annotations/motion-videos/Atomic_OpenQA/videos/",
+      "media_subdir": "motion-videos"
+    },
+    "motion-videos/Atomic_OpenQA/sft_sr0.5.jsonl": {
+      "media_root": "videochat3_data_annotations/motion-videos/Atomic_OpenQA/videos/",
+      "media_subdir": "motion-videos"
+    },
+    "motion-videos/Atomic_OpenQA/sft_sr1.jsonl": {
+      "media_root": "videochat3_data_annotations/motion-videos/Atomic_OpenQA/videos/",
+      "media_subdir": "motion-videos"
+    },
+    "text/Dolci-Instruct-SFT/dolci_instruct_sft_xtuner_format_no_tool_Chat_0-8k_307729_sr1.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Dolci-Instruct-SFT",
+      "media_subdir": ""
+    },
+    "text/Dolci-Instruct-SFT/dolci_instruct_sft_xtuner_format_no_tool_Chat_8k-32k_1787_sr1.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Dolci-Instruct-SFT",
+      "media_subdir": ""
+    },
+    "text/Dolci-Instruct-SFT/dolci_instruct_sft_xtuner_format_no_tool_Coding_0-8k_328614_sr1.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Dolci-Instruct-SFT",
+      "media_subdir": ""
+    },
+    "text/Dolci-Instruct-SFT/dolci_instruct_sft_xtuner_format_no_tool_Math_0-8k_269893_sr1.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Dolci-Instruct-SFT",
+      "media_subdir": ""
+    },
+    "text/Dolci-Instruct-SFT/dolci_instruct_sft_xtuner_format_no_tool_Math_8k-32k_42_sr1.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Dolci-Instruct-SFT",
+      "media_subdir": ""
+    },
+    "text/Dolci-Instruct-SFT/dolci_instruct_sft_xtuner_format_no_tool_Multilingual_0-8k_99739_sr1.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Dolci-Instruct-SFT",
+      "media_subdir": ""
+    },
+    "text/Dolci-Instruct-SFT/dolci_instruct_sft_xtuner_format_no_tool_Multilingual_8k-32k_218_sr1.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Dolci-Instruct-SFT",
+      "media_subdir": ""
+    },
+    "text/Dolci-Instruct-SFT/dolci_instruct_sft_xtuner_format_no_tool_Other_0-8k_254833_sr1.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Dolci-Instruct-SFT",
+      "media_subdir": ""
+    },
+    "text/Dolci-Instruct-SFT/dolci_instruct_sft_xtuner_format_no_tool_Other_8k-32k_28_sr1.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Dolci-Instruct-SFT",
+      "media_subdir": ""
+    },
+    "text/Dolci-Instruct-SFT/dolci_instruct_sft_xtuner_format_no_tool_Precise_IF_0-8k_136752_sr1.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Dolci-Instruct-SFT",
+      "media_subdir": ""
+    },
+    "text/Dolci-Instruct-SFT/dolci_instruct_sft_xtuner_format_no_tool_Precise_IF_32k-128k_9_sr1.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Dolci-Instruct-SFT",
+      "media_subdir": ""
+    },
+    "text/Dolci-Instruct-SFT/dolci_instruct_sft_xtuner_format_no_tool_Precise_IF_8k-32k_72_sr1.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Dolci-Instruct-SFT",
+      "media_subdir": ""
+    },
+    "text/Dolci-Instruct-SFT/dolci_instruct_sft_xtuner_format_no_tool_Reasoning_0-8k_310545_sr1.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Dolci-Instruct-SFT",
+      "media_subdir": ""
+    },
+    "text/Dolci-Instruct-SFT/dolci_instruct_sft_xtuner_format_no_tool_Reasoning_8k-32k_27_sr1.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Dolci-Instruct-SFT",
+      "media_subdir": ""
+    },
+    "text/Dolci-Instruct-SFT/dolci_instruct_sft_xtuner_format_no_tool_Science_0-8k_103818_sr1.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Dolci-Instruct-SFT",
+      "media_subdir": ""
+    },
+    "text/Dolci-Instruct-SFT/dolci_instruct_sft_xtuner_format_no_tool_Science_8k-32k_7_sr1.jsonl": {
+      "media_root": "hhdd:s3://datapipe/frame/bee_15m/Dolci-Instruct-SFT",
+      "media_subdir": ""
+    },
+    "video/motionbench_train_4998_sr1.jsonl": {
+      "media_root": "pnorm2:s3://videochat3_frames/motionbench_fps4/",
+      "media_subdir": "video",
+      "video_read_type": "img2"
+    },
+    "video/vflash_video/cinepile_v2_mc_subtitles_merged_6k_sr0.05.jsonl": {
+      "media_root": "pnorm2:s3://cinepile/ori_video/",
+      "media_subdir": "video"
+    },
+    "video/vflash_video/vqa_tgif_count-openend_qa_train_openend_26839_26839_sr0.1.jsonl": {
+      "media_root": "p2:s3://tgif/",
+      "media_subdir": "video",
+      "video_read_type": "gif"
+    },
+    "video/vflash_video/vqa_tgif_transition_qa-tgif_transition_qa-train_53k_52696_sr0.1.jsonl": {
+      "media_root": "p2:s3://tgif/",
+      "media_subdir": "video",
+      "video_read_type": "gif"
+    },
+    "video/vflash_video/vqa_tvqa-tvqa_123k_122039_merged_subtitles_17435_clean_sr0.05.jsonl": {
+      "media_root": "p2:s3://tvqa/frames_fps3_hq/",
+      "media_subdir": "video",
+      "video_read_type": "img2"
+    }
+  }
+}
