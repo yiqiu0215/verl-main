@@ -6,7 +6,6 @@
 import bisect
 import logging
 import os
-import time
 from pathlib import Path
 
 from omegaconf import OmegaConf
@@ -188,19 +187,19 @@ class MixedVideoSFTDataset:
             if source["mixed_samples"] < source["samples"] else offset % source["samples"]
         )
         rank = os.environ.get("RANK", "?")
-        started_at = time.monotonic()
-        print(
-            f"[DATA START] rank={rank}, index={item}, "
-            f"source={source['name']}, source_index={index}",
-            flush=True,
-        )
+        # started_at = time.monotonic()
+        # print(
+        #     f"[DATA START] rank={rank}, index={item}, "
+        #     f"source={source['name']}, source_index={index}",
+        #     flush=True,
+        # )
         try:
             result = self.datasets[source_index][index]
         except Exception as error:
             print(f"[DATA ERROR] rank={rank}, index={item}, error={error!r}", flush=True)
             raise
-        print(
-            f"[DATA DONE] rank={rank}, index={item}, time={time.monotonic() - started_at:.2f}s",
-            flush=True,
-        )
+        # print(
+        #     f"[DATA DONE] rank={rank}, index={item}, time={time.monotonic() - started_at:.2f}s",
+        #     flush=True,
+        # )
         return result

@@ -70,15 +70,46 @@ uv --version
 
 ```bash
 cd /实际代码目录/VideoLLM-stream/projects/Training/verl-main
+# ==============================
+# 1. 项目配置
+# ==============================
 export PROJECT_ROOT="$(pwd)"
 export UV_PROJECT_ENVIRONMENT="$PROJECT_ROOT/.venv-streaming-sft"
 
-uv python install 3.12
-uv venv --python 3.12 "$UV_PROJECT_ENVIRONMENT"
-uv sync --frozen --extra fsdp --python 3.12
+# ==============================
+# 2. 下载加速
+# ==============================
 
+# 并发下载数（uv 默认约为 50）
+export UV_CONCURRENT_DOWNLOADS=128
+
+# 网络不稳定时避免过早超时
+export UV_HTTP_TIMEOUT=120
+export UV_HTTP_RETRIES=5
+
+# 中国大陆网络可启用清华 PyPI 镜像
+export UV_DEFAULT_INDEX="https://pypi.tuna.tsinghua.edu.cn/simple"
+
+# ==============================
+# 3. 安装 Python 和项目依赖
+# ==============================
+
+# 已安装的 Python 3.12 会被复用
+uv python install 3.12
+
+# uv sync 会自动创建虚拟环境，无需单独 uv venv
+uv sync \
+    --frozen \
+    --extra fsdp \
+    --python 3.12
+
+# ==============================
+# 4. 激活环境
+# ==============================
 source "$UV_PROJECT_ENVIRONMENT/bin/activate"
+
 export PYTHON_BIN="$UV_PROJECT_ENVIRONMENT/bin/python"
+
 "$PYTHON_BIN" --version
 ```
 
@@ -180,8 +211,8 @@ datasets:
     type: streaming
     media_type: video
     enabled: true
-    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/TrainingData/annotations_curated"
-    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/TrainingData"
+    annotations: ${data.streaming_video.annotations}
+    video_root: ${data.streaming_video.video_root}
     max_samples: -1
     repeat: 1
     options:
@@ -193,12 +224,12 @@ datasets:
     type: videochat3
     media_type: image
     enabled: true
-    annotations: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations/image/honey_meta_merged_no_think_stem_norepeat/STEM_AI2D_GPT4V_train_0-0_merged_5507_sr0.05.jsonl"
-    video_root: "/workspace/s/lzw/datasets/VideoChat3/media"
+    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_AI2D_GPT4V_train_0-0_merged_5507_sr0.05.jsonl"
+    video_root: "${data.videochat3.video_root}"
     max_samples: -1
     repeat: 1
     options:
-      annotation_root: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations"
+      annotation_root: "${data.videochat3.annotation_root}"
       source_map: videochat3_sources.json
       fps: 1.0
       video_max_frames: ${data.videochat3.video_max_frames}
@@ -207,12 +238,12 @@ datasets:
     type: videochat3
     media_type: video
     enabled: true
-    annotations: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations/motion-videos/01_atomic_motion/sft_sr1.jsonl"
-    video_root: "/workspace/s/lzw/datasets/VideoChat3/media"
+    annotations: "${data.videochat3.annotation_root}/motion-videos/01_atomic_motion/sft_sr1.jsonl"
+    video_root: "${data.videochat3.video_root}"
     max_samples: -1
     repeat: 1
     options:
-      annotation_root: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations"
+      annotation_root: "${data.videochat3.annotation_root}"
       source_map: videochat3_sources.json
       fps: 4.0
       video_max_frames: ${data.videochat3.video_max_frames}
@@ -432,7 +463,7 @@ alpha_c = 当前全局 batch 的状态 Token 总数 / (出现的状态类别数 
 | 脚本分组 | 关键变量及默认值 |
 | --- | --- |
 | 分布式启动 | `NNODES=1`、`NODE_RANK=0`、`NPROC_PER_NODE=8`、`MASTER_ADDR=127.0.0.1`、`MASTER_PORT=29500` |
-| 数据集入口 | `DATASET_CONFIG`；标注与媒体路径统一在 `datasets.yaml` 中配置 |
+| 数据集入口与路径 | `DATASET_CONFIG`、`STREAMING_ANNOTATIONS`、`STREAMING_VIDEO_ROOT`、`VIDEOCHAT3_ANNOTATION_ROOT`、`VIDEOCHAT3_MEDIA_ROOT` |
 | 抽帧与超长处理 | `STREAMING_FPS=4.0`、`STREAMING_TRUNCATION=filter`、`STREAMING_MAX_REFETCH=100`、`VIDEOCHAT3_FPS=2.0`、`OFFLINE_QA_FPS=1.0` |
 | 帧数与分辨率 | 离线视频 `VIDEO_MAX_FRAMES=256`；共享 `FRAME_MIN_PIXELS=28*28`、`FRAME_MAX_PIXELS=448*448`、`MISSING_MEDIA=skip` |
 | 序列与 DataLoader | `MAX_LENGTH=32768`、`USE_DYNAMIC_BSZ=true`、`MAX_TOKEN_LEN_PER_GPU=$MAX_LENGTH`、`NUM_WORKERS=4`、`TRAIN_MAX_SAMPLES=-1` |
@@ -449,14 +480,16 @@ alpha_c = 当前全局 batch 的状态 Token 总数 / (出现的状态类别数 
 
 默认固定 warmup 200 步；如需按总步数比例设置，使用 `WARMUP_STEPS=-1 WARMUP_RATIO=0.05`，避免固定步数覆盖比例设置。
 
-`datasets.yaml` 中的流式和 VideoChat3 路径：
+默认数据路径：
 
-| 数据源 | 标注路径 / 根目录 | 媒体根目录 |
-| --- | --- | --- |
-| 流式数据 | `/workspace/s/lzw/datasets/Stream-VideoLLM/TrainingData/annotations_curated` | `/workspace/s/lzw/datasets/Stream-VideoLLM/TrainingData` |
-| VideoChat3 | `/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations` | `/workspace/s/lzw/datasets/VideoChat3/media` |
+```text
+STREAMING_VIDEO_ROOT=/workspace/s/lzw/datasets/Stream-VideoLLM/TrainingData
+STREAMING_ANNOTATIONS=$STREAMING_VIDEO_ROOT/annotations_curated
+VIDEOCHAT3_ANNOTATION_ROOT=/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations
+VIDEOCHAT3_MEDIA_ROOT=/workspace/s/lzw/datasets/VideoChat3/media
+```
 
-`datasets.yaml` 统一管理数据源列表、启用状态、模态、标注路径、媒体根目录、重复次数和来源特例。`train.sh` 通过 `DATASET_CONFIG` 加载清单，各数据源路径直接在清单中修改。VideoChat3 的 `options.annotation_root` 也在清单内配置，用于来源映射。混合加载器为清单提供运行时 `data` 配置，`${data.*}` 引用继续用于 FPS、离线帧数上限和流式超长处理等参数，例如 `${data.streaming_video.fps}`。Atomic 和 MotionBench 的来源专用 FPS 保留各自数值。自定义清单若填写固定数值，会覆盖对应全局设置；希望随脚本变化时使用同样的引用格式。
+`datasets.yaml` 继续管理数据源列表、启用状态、模态、标注相对名称、重复次数和来源特例。混合加载器为清单提供运行时 `data` 配置，清单中的 `${data.*}` 引用会在加载时解析。例如 `${data.streaming_video.fps}` 使用脚本设置的流式 FPS，`${data.videochat3.annotation_root}` 使用脚本设置的标注根目录。通用 FPS、离线帧数上限、流式超长处理和路径均使用引用；Atomic 4/8/30 FPS 和 MotionBench 4 FPS 保留各自数值。自定义清单若填写固定数值，会覆盖对应全局设置；希望随脚本变化时使用同样的引用格式。
 
 先抽查流式标注与真实路径，去掉 `--limit-sessions 128` 可检查全部会话：
 
@@ -527,8 +560,8 @@ datasets:
     type: streaming
     media_type: video
     enabled: true
-    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/TrainingData/annotations_curated"
-    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/TrainingData"
+    annotations: ${data.streaming_video.annotations}
+    video_root: ${data.streaming_video.video_root}
     max_samples: -1
     repeat: 1
     options:
