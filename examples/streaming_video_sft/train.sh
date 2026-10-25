@@ -15,31 +15,27 @@ MASTER_ADDR="${MASTER_ADDR:-127.0.0.1}"
 MASTER_PORT="${MASTER_PORT:-29500}"
 export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0,1,2,3,4,5,6,7}"
 
-# Dataset list and media roots; Atomic/MotionBench FPS stays source-specific.
+# Dataset manifest and sampling; Atomic/MotionBench FPS stays source-specific.
 DATASET_CONFIG="${DATASET_CONFIG:-$project_root/examples/streaming_video_sft/datasets.yaml}"
-STREAMING_VIDEO_ROOT="${STREAMING_VIDEO_ROOT:-/workspace/s/lzw/datasets/Stream-VideoLLM/TrainingData}"
-STREAMING_ANNOTATIONS="${STREAMING_ANNOTATIONS:-$STREAMING_VIDEO_ROOT/annotations_curated}"
-VIDEOCHAT3_ANNOTATION_ROOT="${VIDEOCHAT3_ANNOTATION_ROOT:-/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations}"
-VIDEOCHAT3_MEDIA_ROOT="${VIDEOCHAT3_MEDIA_ROOT:-/workspace/s/lzw/datasets/VideoChat3/media}"
-STREAMING_FPS="${STREAMING_FPS:-4.0}"
+STREAMING_FPS="${STREAMING_FPS:-1.0}"
 STREAMING_TRUNCATION="${STREAMING_TRUNCATION:-filter}"
 STREAMING_MAX_REFETCH="${STREAMING_MAX_REFETCH:-100}"
 VIDEOCHAT3_FPS="${VIDEOCHAT3_FPS:-2.0}"
 OFFLINE_QA_FPS="${OFFLINE_QA_FPS:-1.0}"
 # Offline video QA only; streaming keeps every sampled frame.
-VIDEO_MAX_FRAMES="${VIDEO_MAX_FRAMES:-256}"
-FRAME_MIN_PIXELS="${FRAME_MIN_PIXELS:-$((28 * 28))}"
+VIDEO_MAX_FRAMES="${VIDEO_MAX_FRAMES:-128}"
+FRAME_MIN_PIXELS="${FRAME_MIN_PIXELS:-$((32 * 32))}"
 FRAME_MAX_PIXELS="${FRAME_MAX_PIXELS:-$((448 * 448))}"
 MISSING_MEDIA="${MISSING_MEDIA:-skip}"
 
 # Input length and DataLoader; token budget controls dynamic micro-batches.
-MAX_LENGTH="${MAX_LENGTH:-49152}"
+MAX_LENGTH="${MAX_LENGTH:-32768}"
 USE_DYNAMIC_BSZ="${USE_DYNAMIC_BSZ:-true}"
 MAX_TOKEN_LEN_PER_GPU="${MAX_TOKEN_LEN_PER_GPU:-$MAX_LENGTH}"
 LENGTH_BUCKET_MICRO_BATCHES="${LENGTH_BUCKET_MICRO_BATCHES:-true}"
 MAX_PADDED_TOKEN_LEN_PER_GPU="${MAX_PADDED_TOKEN_LEN_PER_GPU:-$MAX_TOKEN_LEN_PER_GPU}"
 MAX_VISION_PATCHES_PER_GPU="${MAX_VISION_PATCHES_PER_GPU:-$((MAX_TOKEN_LEN_PER_GPU * 4))}"
-NUM_WORKERS="${NUM_WORKERS:-4}"
+NUM_WORKERS="${NUM_WORKERS:-6}"
 TRAIN_MAX_SAMPLES="${TRAIN_MAX_SAMPLES:--1}"
 VAL_DATASET_CONFIG="${VAL_DATASET_CONFIG:-null}"
 
@@ -52,7 +48,7 @@ FUSED_KERNEL_BACKEND="${FUSED_KERNEL_BACKEND:-triton}"
 GRADIENT_CHECKPOINTING="${GRADIENT_CHECKPOINTING:-true}"
 
 # Training and optimizer. MICRO_BATCH_SIZE is used only with USE_DYNAMIC_BSZ=false.
-GLOBAL_BATCH_SIZE="${GLOBAL_BATCH_SIZE:-128}"
+GLOBAL_BATCH_SIZE="${GLOBAL_BATCH_SIZE:-512}"
 MICRO_BATCH_SIZE="${MICRO_BATCH_SIZE:-1}"
 EPOCHS="${EPOCHS:-1}"
 TOTAL_TRAINING_STEPS="${TOTAL_TRAINING_STEPS:-null}"
@@ -121,10 +117,6 @@ exec "$PYTHON_BIN" -m torch.distributed.run \
   --master_port="$MASTER_PORT" \
   --module verl.trainer.streaming_sft_trainer \
   "data.dataset_config=$DATASET_CONFIG" \
-  "data.streaming_video.annotations=$STREAMING_ANNOTATIONS" \
-  "data.streaming_video.video_root=$STREAMING_VIDEO_ROOT" \
-  "data.videochat3.annotation_root=$VIDEOCHAT3_ANNOTATION_ROOT" \
-  "data.videochat3.video_root=$VIDEOCHAT3_MEDIA_ROOT" \
   "data.streaming_video.fps=$STREAMING_FPS" \
   "data.streaming_video.truncation=$STREAMING_TRUNCATION" \
   "data.streaming_video.max_refetch=$STREAMING_MAX_REFETCH" \

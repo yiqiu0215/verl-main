@@ -3,8 +3,8 @@ datasets:
     type: streaming
     media_type: video
     enabled: true
-    annotations: ${data.streaming_video.annotations}
-    video_root: ${data.streaming_video.video_root}
+    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/TrainingData/annotations_curated"
+    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/TrainingData"
     max_samples: -1
     repeat: 1
     options:
@@ -13,1036 +13,16 @@ datasets:
       max_refetch: ${data.streaming_video.max_refetch}
       missing_video: ${data.streaming_video.missing_video}
 
-  - name: "videochat3_STEM_AI2D_GPT4V_train_0-0_merged_5507"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_AI2D_GPT4V_train_0-0_merged_5507_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_AI2D_InternVL_train_0-1_merged_10633"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_AI2D_InternVL_train_0-1_merged_10633_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_AI2D_train_0-2_merged_28597"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_AI2D_train_0-2_merged_28597_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_CMM-Math_train_0-0_merged_1485"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_CMM-Math_train_0-0_merged_1485_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_CoSyn_Chemical_train_0-1_merged_18222"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_CoSyn_Chemical_train_0-1_merged_18222_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_CoSyn_Circuit_train_0-1_merged_16962"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_CoSyn_Circuit_train_0-1_merged_16962_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_CoSyn_Math_train_0-3_merged_37427"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_CoSyn_Math_train_0-3_merged_37427_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_CoSyn_Music_train_0-2_merged_21158"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_CoSyn_Music_train_0-2_merged_21158_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_Geo170K_train_0-10_merged_106594"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_Geo170K_train_0-10_merged_106594_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_GeoQA+_train_0-6_merged_60261"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_GeoQA+_train_0-6_merged_60261_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_GeomVerse_train_0-0_merged_6531"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_GeomVerse_train_0-0_merged_6531_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_Geometry3K_train_0-1_merged_11355"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_Geometry3K_train_0-1_merged_11355_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_InterGPS_train_0-0_merged_1326"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_InterGPS_train_0-0_merged_1326_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_MAVIS-Geo_train_0-4_merged_43933"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_MAVIS-Geo_train_0-4_merged_43933_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_MAVIS-Metagen_train_0-6_merged_62497"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_MAVIS-Metagen_train_0-6_merged_62497_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_MapQA_train_0-14_merged_142630"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_MapQA_train_0-14_merged_142630_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_MathV360K_TQA_train_0-0_merged_8437"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_MathV360K_TQA_train_0-0_merged_8437_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_MetaMathQA_train_0-10_merged_110000"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_MetaMathQA_train_0-10_merged_110000_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_PMC-VQA_train_0-2_merged_25959"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_PMC-VQA_train_0-2_merged_25959_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_PathVQA_train_0-2_merged_21776"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_PathVQA_train_0-2_merged_21776_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_RAVEN_train_0-2_merged_23123"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_RAVEN_train_0-2_merged_23123_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_ScienceQA_train_0-1_merged_12633"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_ScienceQA_train_0-1_merged_12633_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_UniGeo_train_0-0_merged_8431"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_UniGeo_train_0-0_merged_8431_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_VQA-RAD_train_0-0_merged_1561"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_VQA-RAD_train_0-0_merged_1561_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_VisualWebInstruct_filtered_train_0-19_merged_190450"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_VisualWebInstruct_filtered_train_0-19_merged_190450_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_VisualWebInstruct_train_0-14_merged_143407"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_VisualWebInstruct_train_0-14_merged_143407_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_VizWiz_train_0-0_merged_6054"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_VizWiz_train_0-0_merged_6054_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_WebSight_train_0-0_merged_7634"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_WebSight_train_0-0_merged_7634_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_STEM_other_train_0-0_merged_3864"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/honey_meta_merged_no_think_stem_norepeat/STEM_other_train_0-0_merged_3864_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_COYO-Recaption_train_1091735"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_caption_part/Caption_COYO-Recaption_train_1091735_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_PixMo-Cap_train_706911"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_caption_part/Caption_PixMo-Cap_train_706911_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_Sherlock_train_16936"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_caption_part/Caption_Sherlock_train_16936_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_ST-VQA_train_13581"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_caption_part/Caption_ST-VQA_train_13581_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part00_train_21000_20806"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part00_train_21000_20806_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part01_train_21000_20802"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part01_train_21000_20802_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part02_train_21000_20829"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part02_train_21000_20829_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part03_train_21000_20847"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part03_train_21000_20847_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part04_train_21000_20856"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part04_train_21000_20856_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part05_train_21000_20864"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part05_train_21000_20864_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part06_train_21000_20841"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part06_train_21000_20841_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part07_train_21000_20805"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part07_train_21000_20805_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part08_train_21000_20837"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part08_train_21000_20837_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part09_train_21000_20853"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part09_train_21000_20853_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part10_train_21000_20846"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part10_train_21000_20846_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part11_train_21000_20846"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part11_train_21000_20846_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part12_train_21000_20835"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part12_train_21000_20835_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part13_train_21000_20827"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part13_train_21000_20827_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part14_train_21000_20825"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part14_train_21000_20825_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part15_train_21000_20843"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part15_train_21000_20843_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part16_train_21000_20840"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part16_train_21000_20840_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part17_train_21000_20852"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part17_train_21000_20852_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part18_train_21000_20817"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part18_train_21000_20817_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_WIT_Part19_train_20898_20742"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_WIT_Part19_train_20898_20742_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Caption_other_Caption_train_1068_1064"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_newest_no_think_norepeat/Caption_other_Caption_train_1068_1064_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_A-OKVQA_train_27504"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_A-OKVQA_train_27504_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_ALFWorld_train_31893"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_ALFWorld_train_31893_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_ALLaVA_train_720794"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_ALLaVA_train_720794_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_ART500K_train_11045"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_ART500K_train_11045_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_Birds-to-Words_train_11169"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_Birds-to-Words_train_11169_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_COCO_train_16332"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_COCO_train_16332_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
   - name: "videochat3_General_Cambrian_Filter_train_93493"
     type: videochat3
     media_type: image
     enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_Cambrian_Filter_train_93493_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
+    annotations: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations/image/beedata_annos_remake_general_no_think/General_Cambrian_Filter_train_93493_sr0.05.jsonl"
+    video_root: "/workspace/s/lzw/datasets/VideoChat3/media"
     max_samples: -1
     repeat: 1
     options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_Cambrian_train_5950"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_Cambrian_train_5950_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_Cauldron_mulberry_train_28068"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_Cauldron_mulberry_train_28068_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_Co-Instruct_train_30507"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_Co-Instruct_train_30507_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_ContrastiveCaption_train_17211"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_ContrastiveCaption_train_17211_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_DreamSim_train_11035"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_DreamSim_train_11035_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_EST-VQA_train_13543"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_EST-VQA_train_13543_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_FlintstonesSV_train_17035"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_FlintstonesSV_train_17035_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_GQA_train_46172"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_GQA_train_46172_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
+      annotation_root: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations"
       source_map: videochat3_sources.json
       fps: 1.0
       video_max_frames: ${data.videochat3.video_max_frames}
@@ -1052,627 +32,12 @@ datasets:
     type: videochat3
     media_type: image
     enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_HQ-Edit_train_36427_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
+    annotations: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations/image/beedata_annos_remake_general_no_think/General_HQ-Edit_train_36427_sr0.05.jsonl"
+    video_root: "/workspace/s/lzw/datasets/VideoChat3/media"
     max_samples: -1
     repeat: 1
     options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_Hateful_Memes_train_7321"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_Hateful_Memes_train_7321_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_IDK_train_16580"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_IDK_train_16580_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_IconQA_train_35911"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_IconQA_train_35911_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_InternVL-SA-1B-Caption_train_16922"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_InternVL-SA-1B-Caption_train_16922_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_KVQA_train_17634"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_KVQA_train_17634_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_KonIQ-10k_train_9361"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_KonIQ-10k_train_9361_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_LLaVA-Instruct-300k_train_470800"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_LLaVA-Instruct-300k_train_470800_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_LLaVA-NeXT-Data_train_711541"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_LLaVA-NeXT-Data_train_711541_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_LRV_Normal_train_39491"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_LRV_Normal_train_39491_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_LVIS-InstructV4_train_145372"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_LVIS-InstructV4_train_145372_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_MMChat-Twitter-Post_train_4317"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_MMChat-Twitter-Post_train_4317_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_MagicBrush_train_9793"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_MagicBrush_train_9793_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_NLVR2_train_54097"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_NLVR2_train_54097_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_NewYorker_Caption_train_2554"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_NewYorker_Caption_train_2554_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_NextQA_train_3092"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_NextQA_train_3092_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_Objects365_train_5192"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_Objects365_train_5192_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_PixMo-AskModelAnything_train_96280"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_PixMo-AskModelAnything_train_96280_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_PixMo-CapQA_train_237263"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_PixMo-CapQA_train_237263_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_PixMo-Points-Explanations_train_44908"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_PixMo-Points-Explanations_train_44908_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_SVIT-core-150K_train_269361"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_SVIT-core-150K_train_269361_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_ScanQA_train_10188"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_ScanQA_train_10188_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_ShareGPT4V_Knowledge_train_1983"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_ShareGPT4V_Knowledge_train_1983_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_ShareGPT4V_SAM_train_122461"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_ShareGPT4V_SAM_train_122461_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_ShareGPT4o_train_73884"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_ShareGPT4o_train_73884_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_TQA_train_26821"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_TQA_train_26821_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_VIST_train_21144"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_VIST_train_21144_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_VSR_train_2752"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_VSR_train_2752_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_ViQuAE_train_2304"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_ViQuAE_train_2304_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_Vision_FLAN_train_458760"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_Vision_FLAN_train_458760_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_Visual7W_train_29965"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_Visual7W_train_29965_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_WebQA_train_6588"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_WebQA_train_6588_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_idefics375k_train_404454"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_idefics375k_train_404454_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_nuScenes_train_6510"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_nuScenes_train_6510_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_General_other_General_train_3061"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_general_no_think/General_other_General_train_3061_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Grounding-and-Counting_CLEVR-Change_train_2988"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/Grounding-and-Counting_CLEVR-Change_train_2988_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Grounding-and-Counting_CLEVR_Math_train_7179"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/Grounding-and-Counting_CLEVR_Math_train_7179_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Grounding-and-Counting_CLEVR_train_498929"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/Grounding-and-Counting_CLEVR_train_498929_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Grounding-and-Counting_MathV360K_VQA-AS_train_4054"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/Grounding-and-Counting_MathV360K_VQA-AS_train_4054_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Grounding-and-Counting_MovieNet_train_7379"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/Grounding-and-Counting_MovieNet_train_7379_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Grounding-and-Counting_Super-CLEVR_train_6811"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/Grounding-and-Counting_Super-CLEVR_train_6811_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Grounding-and-Counting_TallyQA_train_91587"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/Grounding-and-Counting_TallyQA_train_91587_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
+      annotation_root: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations"
       source_map: videochat3_sources.json
       fps: 1.0
       video_max_frames: ${data.videochat3.video_max_frames}
@@ -1682,162 +47,12 @@ datasets:
     type: videochat3
     media_type: image
     enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/Grounding-and-Counting_VisualGenome_train_77404_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
+    annotations: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations/image/beedata_annos_remake_20260111_no_think/Grounding-and-Counting_VisualGenome_train_77404_sr0.05.jsonl"
+    video_root: "/workspace/s/lzw/datasets/VideoChat3/media"
     max_samples: -1
     repeat: 1
     options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_Grounding-and-Counting_other_Grounding-and-Counting_train_1146"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/Grounding-and-Counting_other_Grounding-and-Counting_train_1146_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_OCR_ArXiv_OCR_train_159300"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/OCR_ArXiv_OCR_train_159300_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_OCR_CTW_train_13577"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/OCR_CTW_train_13577_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_OCR_Chrome-Writing_train_9247"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/OCR_Chrome-Writing_train_9247_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_OCR_HME_train_93641"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/OCR_HME_train_93641_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_OCR_IAM_train_5659"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/OCR_IAM_train_5659_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_OCR_ICDAR-LSVT-zh_train_28213"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/OCR_ICDAR-LSVT-zh_train_28213_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_OCR_ICDAR2017_train_9900"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/OCR_ICDAR2017_train_9900_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_OCR_ICDAR2019_train_3392"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/OCR_ICDAR2019_train_3392_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_OCR_IIIT_5K_train_1976"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/OCR_IIIT_5K_train_1976_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
+      annotation_root: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations"
       source_map: videochat3_sources.json
       fps: 1.0
       video_max_frames: ${data.videochat3.video_max_frames}
@@ -1847,87 +62,12 @@ datasets:
     type: videochat3
     media_type: image
     enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/OCR_K12_Printing_train_211104_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
+    annotations: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations/image/beedata_annos_remake_20260111_no_think/OCR_K12_Printing_train_211104_sr0.05.jsonl"
+    video_root: "/workspace/s/lzw/datasets/VideoChat3/media"
     max_samples: -1
     repeat: 1
     options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_OCR_MTWI_zh_train_8330"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/OCR_MTWI_zh_train_8330_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_OCR_Orand-Car-A_train_2000"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/OCR_Orand-Car-A_train_2000_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_OCR_ReCTs_train_17000"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/OCR_ReCTs_train_17000_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_OCR_Rendered_Text_train_9996"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/OCR_Rendered_Text_train_9996_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_OCR_Sroie_train_31832"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/OCR_Sroie_train_31832_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
+      annotation_root: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations"
       source_map: videochat3_sources.json
       fps: 1.0
       video_max_frames: ${data.videochat3.video_max_frames}
@@ -1937,27 +77,12 @@ datasets:
     type: videochat3
     media_type: image
     enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/OCR_TextOCR_train_47656_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
+    annotations: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations/image/beedata_annos_remake_20260111_no_think/OCR_TextOCR_train_47656_sr0.05.jsonl"
+    video_root: "/workspace/s/lzw/datasets/VideoChat3/media"
     max_samples: -1
     repeat: 1
     options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 1.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_OCR_VCR-Wiki_train_77935"
-    type: videochat3
-    media_type: image
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/image/beedata_annos_remake_20260111_no_think/OCR_VCR-Wiki_train_77935_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
+      annotation_root: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations"
       source_map: videochat3_sources.json
       fps: 1.0
       video_max_frames: ${data.videochat3.video_max_frames}
@@ -1967,44 +92,14 @@ datasets:
     type: videochat3
     media_type: video
     enabled: true
-    annotations: "${data.videochat3.annotation_root}/motion-videos/01_atomic_motion/sft_sr1.jsonl"
-    video_root: "${data.videochat3.video_root}"
+    annotations: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations/motion-videos/01_atomic_motion/sft_sr1.jsonl"
+    video_root: "/workspace/s/lzw/datasets/VideoChat3/media"
     max_samples: -1
     repeat: 1
     options:
-      annotation_root: "${data.videochat3.annotation_root}"
+      annotation_root: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations"
       source_map: videochat3_sources.json
       fps: 4.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_atomic_motion_sft_8fps"
-    type: videochat3
-    media_type: video
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/motion-videos/01_atomic_motion/sft_sr0.5.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 8.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_atomic_motion_sft_30fps"
-    type: videochat3
-    media_type: video
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/motion-videos/01_atomic_motion/sft_sr0.1.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 30.0
       video_max_frames: ${data.videochat3.video_max_frames}
       missing_media: ${data.videochat3.missing_media}
 
@@ -2012,44 +107,14 @@ datasets:
     type: videochat3
     media_type: video
     enabled: true
-    annotations: "${data.videochat3.annotation_root}/motion-videos/02_atomic2_extended_motion/sft_sr1.jsonl"
-    video_root: "${data.videochat3.video_root}"
+    annotations: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations/motion-videos/02_atomic2_extended_motion/sft_sr1.jsonl"
+    video_root: "/workspace/s/lzw/datasets/VideoChat3/media"
     max_samples: -1
     repeat: 1
     options:
-      annotation_root: "${data.videochat3.annotation_root}"
+      annotation_root: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations"
       source_map: videochat3_sources.json
       fps: 4.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_atomic_02_atomic2_extended_motion_sft_8fps"
-    type: videochat3
-    media_type: video
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/motion-videos/02_atomic2_extended_motion/sft_sr0.5.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 8.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_atomic_02_atomic2_extended_motion_sft_30fps"
-    type: videochat3
-    media_type: video
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/motion-videos/02_atomic2_extended_motion/sft_sr0.1.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 30.0
       video_max_frames: ${data.videochat3.video_max_frames}
       missing_media: ${data.videochat3.missing_media}
 
@@ -2057,44 +122,14 @@ datasets:
     type: videochat3
     media_type: video
     enabled: true
-    annotations: "${data.videochat3.annotation_root}/motion-videos/Atomic_OpenQA/sft_sr1.jsonl"
-    video_root: "${data.videochat3.video_root}"
+    annotations: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations/motion-videos/Atomic_OpenQA/sft_sr1.jsonl"
+    video_root: "/workspace/s/lzw/datasets/VideoChat3/media"
     max_samples: -1
     repeat: 1
     options:
-      annotation_root: "${data.videochat3.annotation_root}"
+      annotation_root: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations"
       source_map: videochat3_sources.json
       fps: 4.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_atomic_Atomic_OpenQA_sft_8fps"
-    type: videochat3
-    media_type: video
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/motion-videos/Atomic_OpenQA/sft_sr0.5.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 8.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_atomic_Atomic_OpenQA_sft_30fps"
-    type: videochat3
-    media_type: video
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/motion-videos/Atomic_OpenQA/sft_sr0.1.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 30.0
       video_max_frames: ${data.videochat3.video_max_frames}
       missing_media: ${data.videochat3.missing_media}
 
@@ -2102,44 +137,14 @@ datasets:
     type: videochat3
     media_type: video
     enabled: true
-    annotations: "${data.videochat3.annotation_root}/motion-videos/Atomic2_OpenQA/sft_sr1.jsonl"
-    video_root: "${data.videochat3.video_root}"
+    annotations: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations/motion-videos/Atomic2_OpenQA/sft_sr1.jsonl"
+    video_root: "/workspace/s/lzw/datasets/VideoChat3/media"
     max_samples: -1
     repeat: 1
     options:
-      annotation_root: "${data.videochat3.annotation_root}"
+      annotation_root: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations"
       source_map: videochat3_sources.json
       fps: 4.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_atomic_Atomic2_OpenQA_sft_8fps"
-    type: videochat3
-    media_type: video
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/motion-videos/Atomic2_OpenQA/sft_sr0.5.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 8.0
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
-
-  - name: "videochat3_atomic_Atomic2_OpenQA_sft_30fps"
-    type: videochat3
-    media_type: video
-    enabled: true
-    annotations: "${data.videochat3.annotation_root}/motion-videos/Atomic2_OpenQA/sft_sr0.1.jsonl"
-    video_root: "${data.videochat3.video_root}"
-    max_samples: -1
-    repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: 30.0
       video_max_frames: ${data.videochat3.video_max_frames}
       missing_media: ${data.videochat3.missing_media}
 
@@ -2147,12 +152,12 @@ datasets:
     type: videochat3
     media_type: video
     enabled: true
-    annotations: "${data.videochat3.annotation_root}/video/motionbench_train_4998_sr1.jsonl"
-    video_root: "${data.videochat3.video_root}"
+    annotations: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations/video/motionbench_train_4998_sr1.jsonl"
+    video_root: "/workspace/s/lzw/datasets/VideoChat3/media"
     max_samples: -1
     repeat: 1
     options:
-      annotation_root: "${data.videochat3.annotation_root}"
+      annotation_root: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations"
       source_map: videochat3_sources.json
       fps: 4.0
       video_max_frames: ${data.videochat3.video_max_frames}
@@ -2162,28 +167,175 @@ datasets:
     type: videochat3
     media_type: video
     enabled: true
-    annotations: "${data.videochat3.annotation_root}/video/vflash_video/vqa_tvqa-tvqa_123k_122039_merged_subtitles_17435_clean_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
+    annotations: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations/video/vflash_video/vqa_tvqa-tvqa_123k_122039_merged_subtitles_17435_clean_sr0.05.jsonl"
+    video_root: "/workspace/s/lzw/datasets/VideoChat3/media"
     max_samples: -1
     repeat: 1
     options:
-      annotation_root: "${data.videochat3.annotation_root}"
+      annotation_root: "/workspace/s/lzw/datasets/VideoChat3/videochat3_data_annotations"
       source_map: videochat3_sources.json
       fps: ${data.videochat3.fps}
       video_max_frames: ${data.videochat3.video_max_frames}
       missing_media: ${data.videochat3.missing_media}
 
-  - name: "videochat3_cinepile_v2_mc_subtitles_merged_6k"
-    type: videochat3
-    media_type: video
+  - name: "ca1m_choice"
+    type: llava-onevision2-spatial
+    media_type: image
     enabled: true
-    annotations: "${data.videochat3.annotation_root}/video/vflash_video/cinepile_v2_mc_subtitles_merged_6k_sr0.05.jsonl"
-    video_root: "${data.videochat3.video_root}"
+    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_instruct_subset/ca1m_choice.part_*.jsonl"
+    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_subset"
     max_samples: -1
     repeat: 1
-    options:
-      annotation_root: "${data.videochat3.annotation_root}"
-      source_map: videochat3_sources.json
-      fps: ${data.videochat3.fps}
-      video_max_frames: ${data.videochat3.video_max_frames}
-      missing_media: ${data.videochat3.missing_media}
+
+  - name: "ca1m_multi_view"
+    type: llava-onevision2-spatial
+    media_type: image
+    enabled: true
+    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_instruct_subset/ca1m_multi_view.jsonl"
+    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_subset"
+    max_samples: -1
+    repeat: 1
+
+  - name: "ca1m_template"
+    type: llava-onevision2-spatial
+    media_type: image
+    enabled: true
+    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_instruct_subset/ca1m_template.jsonl"
+    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_subset"
+    max_samples: -1
+    repeat: 1
+
+  - name: "ca1m_vacant"
+    type: llava-onevision2-spatial
+    media_type: image
+    enabled: true
+    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_instruct_subset/ca1m_vacant.part_*.jsonl"
+    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_subset"
+    max_samples: -1
+    repeat: 1
+
+  - name: "ca1m_visual_choice"
+    type: llava-onevision2-spatial
+    media_type: image
+    enabled: true
+    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_instruct_subset/ca1m_visual_choice.part_*.jsonl"
+    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_subset"
+    max_samples: -1
+    repeat: 1
+
+  - name: "crosspoint"
+    type: llava-onevision2-spatial
+    media_type: image
+    enabled: true
+    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_instruct_subset/crosspoint.part_*.jsonl"
+    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_subset"
+    max_samples: -1
+    repeat: 1
+
+  - name: "erqa_part1"
+    type: llava-onevision2-spatial
+    media_type: image
+    enabled: true
+    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_instruct_subset/erqa_part1.jsonl"
+    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_subset"
+    max_samples: -1
+    repeat: 1
+
+  - name: "erqa_part2"
+    type: llava-onevision2-spatial
+    media_type: image
+    enabled: true
+    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_instruct_subset/erqa_part2.jsonl"
+    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_subset"
+    max_samples: -1
+    repeat: 1
+
+  - name: "osd_choice"
+    type: llava-onevision2-spatial
+    media_type: image
+    enabled: true
+    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_instruct_subset/osd_choice.part_*.jsonl"
+    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_subset"
+    max_samples: -1
+    repeat: 1
+
+  - name: "osd_reasoning"
+    type: llava-onevision2-spatial
+    media_type: image
+    enabled: true
+    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_instruct_subset/osd_reasoning.part_*.jsonl"
+    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_subset"
+    max_samples: -1
+    repeat: 1
+
+  - name: "osd_template"
+    type: llava-onevision2-spatial
+    media_type: image
+    enabled: true
+    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_instruct_subset/osd_template.part_*.jsonl"
+    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_subset"
+    max_samples: -1
+    repeat: 1
+
+  - name: "pointing"
+    type: llava-onevision2-spatial
+    media_type: image
+    enabled: true
+    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_instruct_subset/pointing.jsonl"
+    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_subset"
+    max_samples: -1
+    repeat: 1
+
+  - name: "refcoco+"
+    type: llava-onevision2-spatial
+    media_type: image
+    enabled: true
+    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_instruct_subset/refcoco+.jsonl"
+    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_subset"
+    max_samples: -1
+    repeat: 1
+
+  - name: "refcoco"
+    type: llava-onevision2-spatial
+    media_type: image
+    enabled: true
+    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_instruct_subset/refcoco.jsonl"
+    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_subset"
+    max_samples: -1
+    repeat: 1
+
+  - name: "refcocog"
+    type: llava-onevision2-spatial
+    media_type: image
+    enabled: true
+    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_instruct_subset/refcocog.jsonl"
+    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_subset"
+    max_samples: -1
+    repeat: 1
+
+  - name: "roborefer_sim"
+    type: llava-onevision2-spatial
+    media_type: image
+    enabled: true
+    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_instruct_subset/roborefer_sim.part_*.jsonl"
+    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_subset"
+    max_samples: -1
+    repeat: 1
+
+  - name: "visual_genome"
+    type: llava-onevision2-spatial
+    media_type: image
+    enabled: true
+    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_instruct_subset/visual_genome.jsonl"
+    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/LLaVA-OneVision-2-Spatial/spatial_subset"
+    max_samples: -1
+    repeat: 1
+
+  - name: ET-Instruct
+    type: et-instruct
+    media_type: video
+    enabled: true
+    annotations: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/ET-Instruct/et_instruct_subset_70k.json"
+    video_root: "/workspace/s/lzw/datasets/Stream-VideoLLM/Source/ET-Instruct/videos_subset"
+    max_samples: -1
+    repeat: 1

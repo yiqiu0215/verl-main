@@ -227,6 +227,6 @@ class VideoChat3SFTDataset(OfflineVideoQASFTDataset):
                     reduced = True
             if not reduced:
                 raise ValueError(
-                    f"VideoChat3 example at {location} exceeds max_length={self.max_length}; "
+                    f"Image/video QA example at {location} exceeds max_length={self.max_length}; "
                     "increase the token budget or reduce image max_pixels. Targets are never truncated."
                 )

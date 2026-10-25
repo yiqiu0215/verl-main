@@ -5,6 +5,8 @@
 
 import bisect
 import logging
+import os
+import time
 from pathlib import Path
 
 from omegaconf import OmegaConf
@@ -65,8 +67,8 @@ class MixedVideoSFTDataset:
             if not enabled:
                 continue
             kind = entry.get("type")
-            if kind not in ("streaming", "offline_video_qa", "videochat3"):
-                raise ValueError(f"Dataset {name!r}: type must be streaming, offline_video_qa or videochat3")
+            if kind not in ("streaming", "offline_video_qa", "videochat3", "llava-onevision2-spatial", "et-instruct"):
+                raise ValueError(f"Dataset {name!r}: unsupported type {kind!r}")
             media_type = entry.get("media_type", "auto")
             if media_type not in ("image", "video", "text", "mixed", "auto"):
                 raise ValueError(f"Dataset {name!r}: unsupported media_type {media_type!r}")
@@ -94,7 +96,11 @@ class MixedVideoSFTDataset:
             options = entry.get("options") or {}
             if not isinstance(options, dict):
                 raise ValueError(f"Dataset {name!r}: options must be a mapping")
-            option_key = "streaming_video" if kind == "streaming" else kind
+            option_key = {
+                "streaming": "streaming_video",
+                "llava-onevision2-spatial": "image_video_qa",
+                "et-instruct": "image_video_qa",
+            }.get(kind, kind)
             source_config = OmegaConf.merge(
                 OmegaConf.create(data_config), {option_key: options}
             )
@@ -115,6 +121,10 @@ class MixedVideoSFTDataset:
                 from .videochat3 import VideoChat3SFTDataset
 
                 dataset_class = VideoChat3SFTDataset
+            elif kind in ("llava-onevision2-spatial", "et-instruct"):
+                from .image_video_qa import ImageVideoQASFTDataset
+
+                dataset_class = ImageVideoQASFTDataset
             else:
                 from .offline_video_qa import OfflineVideoQASFTDataset
 
@@ -177,4 +187,20 @@ class MixedVideoSFTDataset:
             offset * source["samples"] // source["mixed_samples"]
             if source["mixed_samples"] < source["samples"] else offset % source["samples"]
         )
-        return self.datasets[source_index][index]
+        rank = os.environ.get("RANK", "?")
+        started_at = time.monotonic()
+        print(
+            f"[DATA START] rank={rank}, index={item}, "
+            f"source={source['name']}, source_index={index}",
+            flush=True,
+        )
+        try:
+            result = self.datasets[source_index][index]
+        except Exception as error:
+            print(f"[DATA ERROR] rank={rank}, index={item}, error={error!r}", flush=True)
+            raise
+        print(
+            f"[DATA DONE] rank={rank}, index={item}, time={time.monotonic() - started_at:.2f}s",
+            flush=True,
+        )
+        return result

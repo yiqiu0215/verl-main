@@ -8,6 +8,7 @@ import glob
 import json
 import logging
 import math
+import os
 import random
 import re
 from collections import OrderedDict
@@ -31,6 +32,10 @@ class EmptyDatasetError(ValueError):
 
 
 class MaxLengthError(ValueError):
+    pass
+
+
+class VideoFrameTimeError(ValueError):
     pass
 
 
@@ -311,12 +316,38 @@ class VideoFrameReader:
                     end = self.decoder.metadata.end_stream_seconds
                     requested = begin + timestamp
                     if requested > end + self.end_tolerance + 1e-6:
-                        raise ValueError(
+                        raise VideoFrameTimeError(
                             f"Annotation timestamp {timestamp}s exceeds media duration {end - begin}s: {path}"
                         )
                     frame = self.decoder.get_frame_played_at(min(requested, math.nextafter(end, -math.inf)))
-                    if frame.pts_seconds > requested:
-                        raise ValueError(f"Decoder returned a future frame for {timestamp}s: {path}")
+                    if not frame.pts_seconds <= requested:
+                        decoded_pts = frame.pts_seconds
+                        left, right = 0, len(self.decoder)
+                        past_frame = None
+                        # Exact indices preserve presentation order, including variable-frame-rate video.
+                        while left < right:
+                            middle = (left + right) // 2
+                            candidate = self.decoder.get_frame_at(middle)
+                            if not math.isfinite(candidate.pts_seconds):
+                                raise VideoFrameTimeError(
+                                    f"Non-finite frame PTS at index {middle} for {timestamp}s: {path}"
+                                )
+                            if candidate.pts_seconds <= requested:
+                                past_frame = candidate
+                                left = middle + 1
+                            else:
+                                right = middle
+                        if past_frame is None:
+                            raise VideoFrameTimeError(
+                                f"No frame with PTS <= {requested:.9f}s for {timestamp}s: {path}; "
+                                f"decoded_pts={decoded_pts:.9f}s"
+                            )
+                        frame = past_frame
+                        logger.warning(
+                            "Causal frame fallback: rank=%s, video=%s, requested=%.9fs, "
+                            "decoded_pts=%.9fs, selected_pts=%.9fs",
+                            os.environ.get("RANK", "?"), path, requested, decoded_pts, frame.pts_seconds,
+                        )
                     image = Image.fromarray(frame.data.numpy()).convert("RGB")
                 else:
                     frame_path = self._sequence_frame_path(path, timestamp, sequence)
@@ -394,6 +425,7 @@ class StreamingVideoSFTDataset:
         self.skipped = 0
         self.invalid_records = 0
         self.overlong_indices = set()
+        self.invalid_frame_indices = set()
         for record, reference, line_number in load_annotations(parquet_files):
             try:
                 path = resolve_video_path(
@@ -500,11 +532,11 @@ class StreamingVideoSFTDataset:
     def __getitem__(self, item):
         if item < 0 or item >= len(self):
             raise IndexError(item)
-        n_try = min(self.max_refetch, len(self)) if self.truncation == "filter" else 1
+        n_try = min(self.max_refetch, len(self))
         # Deterministic replacements need no extra RNG state in StatefulDataLoader checkpoints.
         offsets = random.Random(item).sample(range(1, len(self)), n_try - 1)
         for index in [item] + [(item + offset) % len(self) for offset in offsets]:
-            if index in self.overlong_indices:
+            if index in self.overlong_indices or index in self.invalid_frame_indices:
                 continue
             try:
                 return self._encode_item(index)
@@ -517,9 +549,19 @@ class StreamingVideoSFTDataset:
                     logger.warning(
                         "Streaming lazy filter: %d overlong conversations skipped in this worker; %s", count, error
                     )
+            except (IndexError, RuntimeError, VideoFrameTimeError) as error:
+                self.invalid_frame_indices.add(index)
+                self.reader = None
+                logger.warning(
+                    "Streaming preprocessing filter: rank=%s, source_index=%d, annotation=%s, video=%s, "
+                    "error_type=%s; %s",
+                    os.environ.get("RANK", "?"), index, self.references[index][2], self.references[index][1],
+                    type(error).__name__, error,
+                )
         raise ValueError(
             f"No valid streaming conversation in {n_try} candidate slots at {self.references[item][2]}; "
-            "increase max_length, reduce FPS/image pixels, or increase streaming_video.max_refetch"
+            "candidates exceed max_length or failed video preprocessing. Check preprocessing warnings, "
+            "max_length, FPS/image pixels, and streaming_video.max_refetch"
         )
 
     def _encode_item(self, item):

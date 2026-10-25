@@ -1,6 +1,8 @@
 """Mixed streaming and offline Qwen3-VL SFT using the existing verl trainer and FSDP engine."""
 
 import logging
+import os
+import sys
 
 import hydra
 
@@ -80,6 +82,12 @@ def main(config):
     try:
         trainer = StreamingSFTTrainer(config)
         trainer.fit()
+    except Exception:
+        logger.exception("Streaming SFT failed on rank %s", os.environ.get("RANK", "?"))
+        sys.stdout.flush()
+        sys.stderr.flush()
+        # Collective cleanup can block while peers wait for this rank; let torchrun terminate them.
+        os._exit(1)
     finally:
         destroy_global_process_group()
 

@@ -62,6 +62,16 @@ data:
     frame_max_pixels: ${data.frame_max_pixels}
     min_pixels: 4096
     max_pixels: 147456
+  image_video_qa:
+    fps: ${data.offline_video_qa.fps}
+    video_max_frames: ${data.video_max_frames}
+    missing_media: ${data.videochat3.missing_media}
+    cache_sessions: 8
+    system_prompt: null
+    min_pixels: ${data.videochat3.min_pixels}
+    max_pixels: ${data.videochat3.max_pixels}
+    frame_min_pixels: ${data.frame_min_pixels}
+    frame_max_pixels: ${data.frame_max_pixels}
 
 model:
   path: /workspace/s/lzw/hf/hub/models--Qwen--Qwen3-VL-2B-Instruct/snapshots/89644892e4d85e24eaac8bacfd4f463576704203

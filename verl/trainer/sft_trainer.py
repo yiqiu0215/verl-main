@@ -372,10 +372,17 @@ class SFTTrainer:
                 )
             ):
                 global_step += 1
+                trace = 57 <= global_step <= 65
+                if trace:
+                    print(f"[TRACE] rank={self.rank} step={global_step} DATA_READY", flush=True)
 
                 # construct tensordict
                 data = tu.get_tensordict(tensor_dict=data, non_tensor_dict=meta_info)
+                if trace:
+                    print(f"[TRACE] rank={self.rank} step={global_step} BEFORE_GATHER", flush=True)
                 batch_seqlens = self._get_batch_seqlens(data=data)
+                if trace:
+                    print(f"[TRACE] rank={self.rank} step={global_step} AFTER_GATHER", flush=True)
                 # this is necessary. Otherwise, it is interpreted as NonTensorStack
                 batch_seqlens_ntd = NonTensorData(batch_seqlens)
 
@@ -385,7 +392,11 @@ class SFTTrainer:
                 if global_step == self.start_profile_step:
                     self.training_client.start_profile()
                 # train for on batch
+                if trace:
+                    print(f"[TRACE] rank={self.rank} step={global_step} BEFORE_TRAIN", flush=True)
                 output = self.training_client.train_batch(data=data)
+                if trace:
+                    print(f"[TRACE] rank={self.rank} step={global_step} AFTER_TRAIN", flush=True)
                 # SFT has one train_batch per step (no PPO-style mini-batch loop), so advancing
                 # the profiler here is the per-step boundary; it also drives a torch.profiler
                 # schedule when one is configured (its unit is one such training step).
